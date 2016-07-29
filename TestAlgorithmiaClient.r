@@ -35,3 +35,17 @@ test.getAlgorithmiaAlgorithm <- function() {
   checkTrue(inherits(algorithm, "AlgorithmiaAlgorithm"))
   checkEquals(algorithm$client, client)
 }
+
+test.getAlgorithmiaDataFile <- function() {
+  client <- getAlgorithmiaClient()
+  dataFile <- client$file("test/path")
+  checkTrue(inherits(dataFile, "AlgorithmiaDataFile"))
+  checkEquals(dataFile$client, client)
+}
+
+test.getAlgorithmiaDataDirectory <- function() {
+  client <- getAlgorithmiaClient()
+  dataDirectory <- client$dir("test/path")
+  checkTrue(inherits(dataDirectory, "AlgorithmiaDataDirectory"))
+  checkEquals(dataDirectory$client, client)
+}

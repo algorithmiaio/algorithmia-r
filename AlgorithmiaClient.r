@@ -4,6 +4,8 @@ library("httr")
 library("rjson")
 
 source("Algorithm.r")
+source("DataFile.r")
+source("DataDirectory.r")
 
 DEFAULT_ALGORITHMIA_API_ADDRESS <- "https://api.algorithmia.com"
 
@@ -24,13 +26,38 @@ getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_)
       algo = function(algoRef) {
         getAlgorithm(.self, algoRef)
       },
-      postJsonHelper = function(algoUrl, input, queryParameters) {
-        inputJson <- NULL
+      file = function(dataUrl) {
+        getDataFile(.self, dataUrl)
+      },
+      dir = function(dataUrl) {
+        getDataDirectory(.self, dataUrl)
+      },
+      getBasicHeaders = function() {
         headers <- c()
 
         if (!is.na(apiKey)) {
           headers["Authorization"] <- apiKey
         }
+
+        headers
+      },
+      getHelper = function(url, queryParameters=c(), targetFile=NULL) {
+        headers <- getBasicHeaders()
+
+        if (is.null(targetFile)) {
+          httr::GET(url=paste0(apiAddress, url),
+                    query=queryParameters,
+                    config=add_headers(headers))
+        } else {
+          httr::GET(url=paste0(apiAddress, url),
+                    query=queryParameters,
+                    config=add_headers(headers),
+                    httr::write_disk(targetFile))
+        }
+      },
+      postJsonHelper = function(algoUrl, input, queryParameters=c()) {
+        inputJson <- NULL
+        headers <- getBasicHeaders()
 
         if (is.null(input) || is.na(input)) {
           inputJson <- rjson::toJSON(NULL)
@@ -44,6 +71,21 @@ getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_)
         }
 
         httr::POST(url=paste0(apiAddress, algoUrl), query=queryParameters, config=add_headers(headers), body=inputJson)
+      },
+      headHelper = function(url) {
+        headers <- getBasicHeaders()
+
+        httr::HEAD(url=paste0(apiAddress, url), config=add_headers(headers))
+      },
+      putHelper = function(url, data) {
+        headers <- getBasicHeaders()
+
+        httr::PUT(url=paste0(apiAddress, url), config=add_headers(headers), body=data)
+      },
+      deleteHelper = function(url) {
+        headers <- getBasicHeaders()
+
+        httr::DELETE(url=paste0(apiAddress, url), config=add_headers(headers))
       }
     )
   )
