@@ -17,7 +17,7 @@ getAlgorithmUrl <- function(input) {
 getResponse <- function(response) {
   data <- content(response)
   if ("error" %in% names(data)) {
-    stop(paste0("Algorithm error: ", data["error"]))
+    stop(paste0("Algorithm error: ", data$error))
   }
 
   response <- NULL

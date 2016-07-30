@@ -30,7 +30,7 @@ checkFor200StatusCode <- function(response) {
 checkResponse <- function(object, response) {
   data <- content(response)
   if ("error" %in% names(data)) {
-    stop(paste0("Data API Error: ", data["error"]))
+    stop(paste0("Data API Error: ", data$error))
   }
 
   if (checkFor200StatusCode(response)) {
