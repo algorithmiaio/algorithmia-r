@@ -24,6 +24,22 @@ test.getName <- function() {
   checkEquals(dataFile$getName(), "d.txt")
 }
 
+test.set_attributes <- function() {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataFile <- client$file("a")
+
+  # When it is first created the attributes should be NA
+  checkTrue(is.na(dataFile$last_modified))
+  checkTrue(is.na(dataFile$size))
+
+  last_modified <- "2016-07-31T05:29:44.000Z"
+  size <- 5
+  attributes <- list(last_modified=last_modified, size=size)
+  dataFile$setAttributes(attributes)
+  checkEquals(strptime(last_modified, "%Y-%m-%dT%H:%M:%S.000Z"), dataFile$last_modified)
+  checkEquals(size, dataFile$size)
+}
+
 test.deleteNonExistantFile <-function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
   dataFile <- client$file("data://.my/doesNotExist/doesNotExist.txt")

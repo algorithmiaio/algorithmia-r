@@ -5,13 +5,17 @@ source("data_utilities.r")
 
 getDataFile <- function(client, dataRef) {
   AlgorithmiaDataFile <- setRefClass("AlgorithmiaDataFile",
-    field = list(client = "AlgorithmiaClient", dataFileUrl = "character"),
+    field = list(client = "AlgorithmiaClient", dataFileUrl = "character", last_modified = "ANY", size = "numeric"),
     methods = list(
       exists = function() {
         checkFor200StatusCode(client$headHelper(dataFileUrl))
       },
       getName = function() {
         gsub("^.*/", "", dataFileUrl)
+      },
+      setAttributes = function(attributes) {
+        last_modified <<- strptime(attributes$last_modified, "%Y-%m-%dT%H:%M:%S.000Z")
+        size <<- attributes$size
       },
       getJson = function() {
         if (!exists()) {
@@ -64,5 +68,5 @@ getDataFile <- function(client, dataRef) {
       }
     )
   )
-  AlgorithmiaDataFile$new(client=client, dataFileUrl=getDataUrl(dataRef, TRUE))
+  AlgorithmiaDataFile$new(client=client, dataFileUrl=getDataUrl(dataRef, TRUE), last_modified=NA, size=NA_integer_)
 }

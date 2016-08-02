@@ -82,6 +82,11 @@ test.dirListFilesSmall <- function() {
     cur <- fileIterator$getNext()
     checkTrue(inherits(cur, "AlgorithmiaDataFile"))
     filesFound <- c(filesFound, cur$getName())
+
+    # Make sure that the files have their attributes set
+    checkTrue(!is.na(cur$last_modified))
+    checkTrue(inherits(cur$last_modified, "POSIXlt"))
+    checkEquals(cur$size, 3)
   }
 
   checkEquals(sort(filesFound), c("one", "two"))

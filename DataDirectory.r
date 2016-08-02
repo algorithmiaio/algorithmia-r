@@ -17,10 +17,10 @@ getIterator <- function(dataDirectory, typeFilter) {
   AlgorithmiaDirectoryIterator <- setRefClass("AlgorithmiaDirectoryIterator",
     fields = list(dataDirectory = "AlgorithmiaDataDirectory", typeFilter="character",
                   marker="character", first="logical", index="numeric",
-                  nameList="character", typeIsFileList="logical"),
+                  directoryEntries="list"),
     methods = list(
       hasNext = function() {
-        if (first || (index > length(nameList) && !is.na(marker))) {
+        if (first || (index > length(directoryEntries) && !is.na(marker))) {
           # do get and set marker
           data <- dataDirectory$getDirectoryEntries(marker)
           if ("marker" %in% names(data)) {
@@ -37,15 +37,17 @@ getIterator <- function(dataDirectory, typeFilter) {
             numElements <- length(data$folders)
           }
 
-          nameList <<- vector(mode="character", length=numElements)
-          typeIsFileList <<- vector(mode="logical", length=numElements)
+          directoryEntries <<- vector(mode="list", length=numElements)
 
           curIndex <- 1
           if (is.na(typeFilter) || typeFilter == DATA_OBJECT_TYPE_FILE) {
             fileCount <- 0
             while (fileCount < length(data$files)) {
-              nameList[curIndex] <<- data$files[[fileCount + 1]]$filename
-              typeIsFileList[curIndex] <<- TRUE
+              directoryEntries[[curIndex]] <<- list(
+                name=data$files[[fileCount + 1]]$filename,
+                isFile=TRUE,
+                last_modified=data$files[[fileCount + 1]]$last_modified,
+                size=data$files[[fileCount + 1]]$size)
 
               curIndex <- curIndex + 1
               fileCount <- fileCount + 1
@@ -55,8 +57,9 @@ getIterator <- function(dataDirectory, typeFilter) {
           if (is.na(typeFilter) || typeFilter == DATA_OBJECT_TYPE_DIRECTORY) {
             folderCount <- 0
             while (folderCount < length(data$folders)) {
-              nameList[curIndex] <<- data$folders[[folderCount + 1]]$name
-              typeIsFileList[curIndex] <<- FALSE
+              directoryEntries[[curIndex]] <<- list(
+                name=data$folders[[folderCount + 1]]$name,
+                isFile=FALSE)
 
               curIndex <- curIndex + 1
               folderCount <- folderCount + 1
@@ -66,15 +69,16 @@ getIterator <- function(dataDirectory, typeFilter) {
           index <<- 1
           first <<- FALSE
         }
-        index <= length(nameList)
+        index <= length(directoryEntries)
       },
       getNext = function() {
         if (hasNext()) {
           result <- NULL
-          if (typeIsFileList[index]) {
-            result <- dataDirectory$file(nameList[index])
+          if (directoryEntries[[index]]$isFile) {
+            result <- dataDirectory$file(directoryEntries[[index]]$name)
+            result$setAttributes(directoryEntries[[index]])
           } else {
-            result <- dataDirectory$dir(nameList[index])
+            result <- dataDirectory$dir(directoryEntries[[index]]$name)
           }
           index <<- index + 1
           result
@@ -85,7 +89,7 @@ getIterator <- function(dataDirectory, typeFilter) {
     )
   )
   AlgorithmiaDirectoryIterator$new(dataDirectory=dataDirectory, typeFilter=typeFilter,
-      marker=NA_character_, first=TRUE, index=1, nameList=vector(mode="character"), typeIsFileList=vector(mode="logical"))
+      marker=NA_character_, first=TRUE, index=1, directoryEntries=vector(mode="list"))
 }
 
 getDataDirectory <- function(client, dataRef) {
