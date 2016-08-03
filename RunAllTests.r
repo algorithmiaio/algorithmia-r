@@ -1,7 +1,7 @@
 #install.packages("RUnit")
 library("RUnit")
 
-runTestFile("TestAlgorithmiaClient.r")
-runTestFile("TestAlgorithm.r")
-runTestFile("TestDataFile.r")
-runTestFile("TestDataDirectory.r")
+runTestFile("AlgorithmiaClientTest.r")
+runTestFile("AlgorithmTest.r")
+runTestFile("DataFileTest.r")
+runTestFile("DataDirectoryTest.r")
