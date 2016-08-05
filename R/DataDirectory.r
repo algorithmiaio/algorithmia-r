@@ -57,9 +57,9 @@ AlgorithmiaDataDirectory <- setRefClass("AlgorithmiaDataDirectory",
     getDirectoryEntries = function(marker) {
       if (!is.na(marker)) {
         queryParameters <- list(marker=marker)
-        content(client$getHelper(dataDirectoryUrl, queryParameters=queryParameters))
+        httr::content(client$getHelper(dataDirectoryUrl, queryParameters=queryParameters))
       } else {
-        content(client$getHelper(dataDirectoryUrl))
+        httr::content(client$getHelper(dataDirectoryUrl))
       }
     },
     files = function() {
@@ -69,7 +69,7 @@ AlgorithmiaDataDirectory <- setRefClass("AlgorithmiaDataDirectory",
       getIterator(.self, DATA_OBJECT_TYPE_DIRECTORY)
     },
     getPermissions = function() {
-      response <- content(client$getHelper(dataDirectoryUrl, queryParameters=list(acl='true')))
+      response <- httr::content(client$getHelper(dataDirectoryUrl, queryParameters=list(acl='true')))
       if ("acl" %in% names(response)) {
         getAcl(response$acl)
       } else {

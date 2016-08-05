@@ -17,7 +17,7 @@ getAlgorithmUrl <- function(input) {
 }
 
 getResponse <- function(response) {
-  data <- content(response)
+  data <- httr::content(response)
   if ("error" %in% names(data)) {
     stop(paste0("Algorithm error: ", data$error))
   }
@@ -39,9 +39,9 @@ AlgorithmiaAlgorithm <- setRefClass("AlgorithmiaAlgorithm",
       if (queryParameters$output == "default") {
         getResponse(client$postJsonHelper(algoUrl, input, queryParameters))
       } else if (queryParameters$output == "void") {
-        content(client$postJsonHelper(algoUrl, input, queryParameters))
+        httr::content(client$postJsonHelper(algoUrl, input, queryParameters))
       } else if (queryParameters$output == "raw") {
-        content(client$postJsonHelper(algoUrl, input, queryParameters), as="raw")
+        httr::content(client$postJsonHelper(algoUrl, input, queryParameters), as="raw")
       } else {
         stop(paste0("This is an unsupported output type: ", queryParameters$output))
       }

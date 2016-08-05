@@ -24,11 +24,11 @@ getDataUrl <- function(input, isFile) {
 }
 
 checkFor200StatusCode <- function(response) {
-  status_code(response) == 200
+  httr::status_code(response) == 200
 }
 
 checkResponse <- function(object, response) {
-  data <- content(response)
+  data <- httr::content(response)
   if ("error" %in% names(data)) {
     stop(paste0("Data API Error: ", data$error))
   }
@@ -36,6 +36,6 @@ checkResponse <- function(object, response) {
   if (checkFor200StatusCode(response)) {
     object
   } else {
-    stop(paste0("Server error code: ", status_code(response)))
+    stop(paste0("Server error code: ", httr::status_code(response)))
   }
 }

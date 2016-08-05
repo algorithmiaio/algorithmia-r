@@ -1,10 +1,6 @@
 library("RUnit")
 library("tools")
 
-source("Client.r")
-source("DataDirectory.r")
-source("Acl.r")
-
 test.invalidPath <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
   checkException(client$dir(""))

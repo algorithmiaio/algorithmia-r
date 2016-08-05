@@ -1,8 +1,6 @@
 library("RUnit")
 library("tools")
 
-source("Algorithm.r")
-
 test.getAlgorithmPathErrors <- function() {
   checkException(getAlgorithmUrl(1))
   checkException(getAlgorithmUrl("BLAH"))
