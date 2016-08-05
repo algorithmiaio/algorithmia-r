@@ -3,6 +3,7 @@ library("tools")
 
 source("AlgorithmiaClient.r")
 source("DataDirectory.r")
+source("Acl.r")
 
 test.invalidPath <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
@@ -160,4 +161,63 @@ test.dirListFilesLarge <- function() {
 
   checkEquals(numSeen, NUM_FILES)
   checkTrue(andAll)
+}
+
+test.directoryACLs <- function () {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataDir <- client$dir("data://.my/RTest_directoryACLs")
+
+  if (dataDir$exists()) {
+    dataDir$delete(TRUE)
+  }
+
+  # When we create it with the default, it should only have access from my algorithms
+  dataDir$create()
+  perms <- client$dir("data://.my/RTest_directoryACLs")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.MY_ALGORITHMS$read_acl)
+  dataDir$delete(TRUE)
+
+  # When we create it with the default, it should only have access from my algorithms
+  dataDir$create(ReadAcl.MY_ALGORITHMS)
+  perms <- client$dir("data://.my/RTest_directoryACLs")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.MY_ALGORITHMS$read_acl)
+  dataDir$delete(TRUE)
+
+  # make it private at the start
+  dataDir$create(ReadAcl.PRIVATE)
+  perms <- client$dir("data://.my/RTest_directoryACLs")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.PRIVATE$read_acl)
+  dataDir$delete(TRUE)
+
+  # make it public at the start
+  dataDir$create(ReadAcl.PUBLIC)
+  perms <- client$dir("data://.my/RTest_directoryACLs")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.PUBLIC$read_acl)
+  dataDir$delete(TRUE)
+}
+
+test.directoryACLUpdatePermissions <- function () {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataDir <- client$dir("data://.my/RTest_directoryACLUpdatePermissions")
+
+  if (dataDir$exists()) {
+    dataDir$delete(TRUE)
+  }
+
+  dataDir$create()
+
+  # change permission to private
+  dataDir$updatePermissions(ReadAcl.PRIVATE)
+  perms <- client$dir("data://.my/RTest_directoryACLUpdatePermissions")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.PRIVATE$read_acl)
+
+  # change permission to public
+  dataDir$updatePermissions(ReadAcl.PUBLIC)
+  perms <- client$dir("data://.my/RTest_directoryACLUpdatePermissions")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.PUBLIC$read_acl)
+
+  # change permission to my algorithms
+  dataDir$updatePermissions(ReadAcl.MY_ALGORITHMS)
+  perms <- client$dir("data://.my/RTest_directoryACLUpdatePermissions")$getPermissions()
+  checkEquals(perms$read_acl, ReadAcl.MY_ALGORITHMS$read_acl)
 }

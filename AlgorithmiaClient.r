@@ -86,6 +86,12 @@ getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_)
         headers <- getBasicHeaders()
 
         httr::DELETE(url=paste0(apiAddress, url), config=add_headers(headers))
+      },
+      patchJsonHelper = function(url, input) {
+        headers <- getBasicHeaders()
+        headers["Content-Type"] <- 'application/json'
+
+        httr::PATCH(url=paste0(apiAddress, url), config=add_headers(headers), body=rjson::toJSON(input))
       }
     )
   )

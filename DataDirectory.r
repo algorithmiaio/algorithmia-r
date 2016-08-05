@@ -1,4 +1,5 @@
 source("data_utilities.r")
+source("Acl.r")
 
 DATA_OBJECT_TYPE_FILE <- "FILE"
 DATA_OBJECT_TYPE_DIRECTORY <- "DIRECTORY"
@@ -109,8 +110,13 @@ getDataDirectory <- function(client, dataRef) {
         checkFor200StatusCode(client$getHelper(dataDirectoryUrl))
       },
       # TODO james - add ACL support
-      create = function() {
-        data <- list(name=getName())
+      create = function(acl=NULL) {
+        data <- if (!is.null(acl)) {
+          list(name=getName(), acl=acl$getApiQueryList())
+        } else {
+          list(name=getName())
+        }
+
         parent <- getParent()
         response <- client$postJsonHelper(parent, data)
         checkResponse(.self, response)
@@ -142,6 +148,19 @@ getDataDirectory <- function(client, dataRef) {
       },
       dirs = function() {
         getIterator(.self, DATA_OBJECT_TYPE_DIRECTORY)
+      },
+      getPermissions = function() {
+        response <- content(client$getHelper(dataDirectoryUrl, queryParameters=list(acl='true')))
+        if ("acl" %in% names(response)) {
+          getAcl(response$acl)
+        } else {
+          NULL
+        }
+      },
+      updatePermissions = function(acl) {
+        input <- list(acl=acl$getApiQueryList())
+        response <- client$patchJsonHelper(dataDirectoryUrl, input)
+        checkResponse(.self, response)
       }
     )
   )
