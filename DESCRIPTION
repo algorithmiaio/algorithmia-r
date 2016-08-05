@@ -18,3 +18,7 @@ Collate:
     'DataDirectory.r'
     'DataFile.r'
     'data_utilities.r'
+Imports:
+    base64enc,
+    httr,
+    rjson
