@@ -1,8 +1,11 @@
 Package: algorithmia
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Type: Package
+Title: Allows you to easily interact with the Algorithmia platform
+Version: 0.0.1
+Date: 2016-08-07
+Author: James Athappilly
+Maintainer: James Athappilly <jamesa@algorithmia.com>
+Description: Allows you to call algorithms in the Algorithmia platform and access their Data API
 Depends:
     R (>= 3.3.1)
 License: What license is it under?
@@ -15,4 +18,3 @@ Collate:
     'DataDirectory.r'
     'DataFile.r'
     'data_utilities.r'
-RoxygenNote: 5.0.1.9000
