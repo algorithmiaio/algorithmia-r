@@ -1,7 +1,7 @@
 library("RUnit")
 library("tools")
 
-source("AlgorithmiaClient.r")
+source("Client.r")
 
 test.getAlgorithmiaApiAddress <- function() {
   checkEquals(getAlgorithmiaApiAddress("BLAH"), "BLAH")

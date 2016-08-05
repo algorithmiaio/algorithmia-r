@@ -1,7 +1,7 @@
 library("RUnit")
 library("tools")
 
-source("AlgorithmiaClient.r")
+source("Client.r")
 source("DataFile.r")
 
 test.invalidPath <- function() {
