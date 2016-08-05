@@ -1,19 +1,20 @@
 # TODO(james): you should really unit test this since, you know...
 # best practices and all that jazz. But maybe Allison won't find out
 # There are some indirect tests in DataDirectoryTest
-getAcl <- function(response) {
-    AlgorithmiaAcl <- setRefClass("AlgorithmiaAcl",
-        fields = list(read_acl = "character"),
-        methods = list(
-            getApiQueryList = function() {
-                if (read_acl == "PRIVATE") {
-                    list(read=list())
-                } else {
-                    list(read=list(read_acl))
-                }
+AlgorithmiaAcl <- setRefClass("AlgorithmiaAcl",
+    fields = list(read_acl = "character"),
+    methods = list(
+        getApiQueryList = function() {
+            if (read_acl == "PRIVATE") {
+                list(read=list())
+            } else {
+                list(read=list(read_acl))
             }
-        )
+        }
     )
+)
+
+getAcl <- function(response) {
     if ("read" %in% names(response)) {
         if (length(response$read) == 0) {
             AlgorithmiaAcl$new(read_acl="PRIVATE")

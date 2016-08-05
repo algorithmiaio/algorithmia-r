@@ -1,3 +1,5 @@
+#' @include Client.r
+
 getAlgorithmUrl <- function(input) {
   if (!(is.character(input) && length(input) == 1)) {
     stop("algorithm path needs to be a string")
@@ -30,28 +32,29 @@ getResponse <- function(response) {
   response
 }
 
-getAlgorithm <- function(client, algoRef) {
-  AlgorithmiaAlgorithm <- setRefClass("AlgorithmiaAlgorithm",
-    field = list(client = "AlgorithmiaClient", algoUrl = "character", queryParameters = "list"),
-    methods = list(
-      pipe = function(input) {
-        if (queryParameters$output == "default") {
-          getResponse(client$postJsonHelper(algoUrl, input, queryParameters))
-        } else if (queryParameters$output == "void") {
-          content(client$postJsonHelper(algoUrl, input, queryParameters))
-        } else if (queryParameters$output == "raw") {
-          content(client$postJsonHelper(algoUrl, input, queryParameters), as="raw")
-        } else {
-          stop(paste0("This is an unsupported output type: ", queryParameters$output))
-        }
-      },
-      setOptions = function(timeout=300, stdout=FALSE, output="default", parameters=list()) {
-        queryParameters <<- list(timeout=timeout, stdout=stdout)
-        queryParameters <<- modifyList(queryParameters, parameters)
-        queryParameters["output"] <<- output
+AlgorithmiaAlgorithm <- setRefClass("AlgorithmiaAlgorithm",
+  field = list(client = "AlgorithmiaClient", algoUrl = "character", queryParameters = "list"),
+  methods = list(
+    pipe = function(input) {
+      if (queryParameters$output == "default") {
+        getResponse(client$postJsonHelper(algoUrl, input, queryParameters))
+      } else if (queryParameters$output == "void") {
+        content(client$postJsonHelper(algoUrl, input, queryParameters))
+      } else if (queryParameters$output == "raw") {
+        content(client$postJsonHelper(algoUrl, input, queryParameters), as="raw")
+      } else {
+        stop(paste0("This is an unsupported output type: ", queryParameters$output))
       }
-    )
+    },
+    setOptions = function(timeout=300, stdout=FALSE, output="default", parameters=list()) {
+      queryParameters <<- list(timeout=timeout, stdout=stdout)
+      queryParameters <<- modifyList(queryParameters, parameters)
+      queryParameters["output"] <<- output
+    }
   )
+)
+
+getAlgorithm <- function(client, algoRef) {
   defaultParameters <- list(timeout=300, stdout=FALSE, output="default")
   AlgorithmiaAlgorithm$new(client=client, algoUrl=getAlgorithmUrl(algoRef), queryParameters=defaultParameters)
 }
