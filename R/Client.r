@@ -2,6 +2,7 @@
 library("base64enc")
 library("httr")
 library("rjson")
+library("methods")
 
 DEFAULT_ALGORITHMIA_API_ADDRESS <- "https://api.algorithmia.com"
 

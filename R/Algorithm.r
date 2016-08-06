@@ -1,5 +1,7 @@
 #' @include Client.r
 
+library("methods")
+
 getAlgorithmUrl <- function(input) {
   if (!(is.character(input) && length(input) == 1)) {
     stop("algorithm path needs to be a string")

@@ -21,4 +21,5 @@ Collate:
 Imports:
     base64enc,
     httr,
-    rjson
+    rjson,
+    methods

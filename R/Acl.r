@@ -1,3 +1,5 @@
+library("methods")
+
 # TODO(james): you should really unit test this since, you know...
 # best practices and all that jazz. But maybe Allison won't find out
 # There are some indirect tests in DataDirectoryTest

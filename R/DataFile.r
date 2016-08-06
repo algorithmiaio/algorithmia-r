@@ -1,5 +1,6 @@
 #' @include Client.r
 
+library("methods")
 library("httr")
 library("rjson")
 
