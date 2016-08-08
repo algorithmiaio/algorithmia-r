@@ -7,7 +7,7 @@ Author: James Athappilly
 Maintainer: James Athappilly <jamesa@algorithmia.com>
 Description: Allows you to call algorithms in the Algorithmia platform and access their Data API
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.3.1),
     methods (>= 2.5.0)
 License: What license is it under?
 Encoding: UTF-8
