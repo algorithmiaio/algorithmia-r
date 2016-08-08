@@ -16,7 +16,7 @@ getAlgorithmiaApiAddress <- function(apiAddress=NA_character_) {
   }
 }
 
-AlgorithmiaClient <- setRefClass("AlgorithmiaClient",
+AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
   fields = list(apiKey = "character", apiAddress = "character"),
   methods = list(
     algo = function(algoRef) {

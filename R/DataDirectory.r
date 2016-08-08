@@ -15,7 +15,7 @@ getChildPath <- function(parentPath, childName) {
   childPath
 }
 
-AlgorithmiaDataDirectory <- setRefClass("AlgorithmiaDataDirectory",
+AlgorithmiaDataDirectory <- methods::setRefClass("AlgorithmiaDataDirectory",
   field = list(client = "AlgorithmiaClient", dataDirectoryUrl = "character", dataDirectoryPath = "character"),
   methods = list(
     getName = function() {
@@ -86,7 +86,7 @@ AlgorithmiaDataDirectory <- setRefClass("AlgorithmiaDataDirectory",
   )
 )
 
-AlgorithmiaDirectoryIterator <- setRefClass("AlgorithmiaDirectoryIterator",
+AlgorithmiaDirectoryIterator <- methods::setRefClass("AlgorithmiaDirectoryIterator",
   fields = list(dataDirectory = "AlgorithmiaDataDirectory", typeFilter="character",
                 marker="character", first="logical", index="numeric",
                 directoryEntries="list"),

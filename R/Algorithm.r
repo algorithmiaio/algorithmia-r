@@ -34,7 +34,7 @@ getResponse <- function(response) {
   response
 }
 
-AlgorithmiaAlgorithm <- setRefClass("AlgorithmiaAlgorithm",
+AlgorithmiaAlgorithm <- methods::setRefClass("AlgorithmiaAlgorithm",
   field = list(client = "AlgorithmiaClient", algoUrl = "character", queryParameters = "list"),
   methods = list(
     pipe = function(input) {
