@@ -23,3 +23,4 @@ Imports:
     base64enc,
     httr,
     rjson,
+    xml2
