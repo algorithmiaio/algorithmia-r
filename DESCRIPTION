@@ -9,7 +9,7 @@ Description: Allows you to call algorithms in the Algorithmia platform and acces
 Depends:
     R (>= 3.3.1),
     methods (>= 2.5.0)
-License: What license is it under?
+License: MIT License
 Encoding: UTF-8
 LazyData: true
 Collate:
