@@ -41,11 +41,11 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       headers <- getBasicHeaders()
 
       if (is.null(targetFile)) {
-        httr::GET(url=paste0(apiAddress, url),
+        httr::GET(url=URLecode(paste0(apiAddress, url)),
                   query=queryParameters,
                   config=httr::add_headers(headers))
       } else {
-        httr::GET(url=paste0(apiAddress, url),
+        httr::GET(url=URLecode(paste0(apiAddress, url)),
                   query=queryParameters,
                   config=httr::add_headers(headers),
                   httr::write_disk(targetFile))
@@ -66,28 +66,28 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
         headers["Content-Type"] <- 'application/json'
       }
 
-      httr::POST(url=paste0(apiAddress, algoUrl), query=queryParameters, config=httr::add_headers(headers), body=inputJson)
+      httr::POST(url=URLecode(paste0(apiAddress, algoUrl)), query=queryParameters, config=httr::add_headers(headers), body=inputJson)
     },
     headHelper = function(url) {
       headers <- getBasicHeaders()
 
-      httr::HEAD(url=paste0(apiAddress, url), config=httr::add_headers(headers))
+      httr::HEAD(url=URLecode(paste0(apiAddress, url)), config=httr::add_headers(headers))
     },
     putHelper = function(url, data) {
       headers <- getBasicHeaders()
 
-      httr::PUT(url=paste0(apiAddress, url), config=httr::add_headers(headers), body=data)
+      httr::PUT(url=URLecode(paste0(apiAddress, url)), config=httr::add_headers(headers), body=data)
     },
     deleteHelper = function(url) {
       headers <- getBasicHeaders()
 
-      httr::DELETE(url=paste0(apiAddress, url), config=httr::add_headers(headers))
+      httr::DELETE(url=URLecode(paste0(apiAddress, url)), config=httr::add_headers(headers))
     },
     patchJsonHelper = function(url, input) {
       headers <- getBasicHeaders()
       headers["Content-Type"] <- 'application/json'
 
-      httr::PATCH(url=paste0(apiAddress, url), config=httr::add_headers(headers), body=rjson::toJSON(input))
+      httr::PATCH(url=URLecode(paste0(apiAddress, url)), config=httr::add_headers(headers), body=rjson::toJSON(input))
     }
   )
 )
