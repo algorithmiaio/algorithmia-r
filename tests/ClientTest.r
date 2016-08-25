@@ -1,15 +1,20 @@
 library("RUnit")
 library("tools")
 
-test.getAlgorithmiaApiAddress <- function() {
-  checkEquals(getAlgorithmiaApiAddress("BLAH"), "BLAH")
-  checkEquals(getAlgorithmiaApiAddress(), DEFAULT_ALGORITHMIA_API_ADDRESS)
+DEFAULT_ALGORITHMIA_API_ADDRESS = "https://api.algorithmia.com"
+
+test.getAlgorithmiaApiAddressFromClient <- function() {
+  client <- getAlgorithmiaClient("doesn't matter", "BLAH")
+  checkEquals(client$apiAddress, "BLAH")
+  client <- getAlgorithmiaClient()
+  checkEquals(client$apiAddress, DEFAULT_ALGORITHMIA_API_ADDRESS)
 }
 
 test.getAlgorithmiaApiAddressWithEnvironmentVariable <- function() {
   testEnvironmentVariable <- "from_env_variable"
   Sys.setenv(ALGORITHMIA_API = testEnvironmentVariable)
-  checkEquals(getAlgorithmiaApiAddress(), testEnvironmentVariable)
+  client <- getAlgorithmiaClient()
+  checkEquals(client$apiAddress, testEnvironmentVariable)
   Sys.unsetenv("ALGORITHMIA_API")
 }
 

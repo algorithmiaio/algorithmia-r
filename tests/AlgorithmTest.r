@@ -2,14 +2,16 @@ library("RUnit")
 library("tools")
 
 test.getAlgorithmPathErrors <- function() {
-  checkException(getAlgorithmUrl(1))
-  checkException(getAlgorithmUrl("BLAH"))
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  checkException(client$algo(1))
+  checkException(client$algo("BLAH"))
 }
 
 test.getAlgorithmPath <- function() {
-  checkEquals(getAlgorithmUrl("a/b"), "/v1/algo/a/b")
-  checkEquals(getAlgorithmUrl("/c/d"), "/v1/algo/c/d")
-  checkEquals(getAlgorithmUrl("algo://e/f"), "/v1/algo/e/f")
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  checkEquals(client$algo("a/b")$algoUrl, "/v1/algo/a/b")
+  checkEquals(client$algo("/c/d")$algoUrl, "/v1/algo/c/d")
+  checkEquals(client$algo("algo://e/f")$algoUrl, "/v1/algo/e/f")
 }
 
 test.hasResultAndMetadata <- function() {
