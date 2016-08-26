@@ -3,15 +3,17 @@
 \docType{data}
 \name{ReadAcl.PUBLIC}
 \alias{ReadAcl.PUBLIC}
-\title{The ACL that allows anyone to read an item.}
+\title{The ACL that allows anyone to read an item.
+Sample usage:
+dataDirectory$create(ReadAcl.PUBLIC)
+dataDirectory$updatePermissions(ReadAcl.PUBLIC)}
 \format{An object of class \code{AlgorithmiaAcl} of length 1.}
 \usage{
 ReadAcl.PUBLIC
 }
 \description{
 The ACL that allows anyone to read an item.
-}
-\examples{
+Sample usage:
 dataDirectory$create(ReadAcl.PUBLIC)
 dataDirectory$updatePermissions(ReadAcl.PUBLIC)
 }

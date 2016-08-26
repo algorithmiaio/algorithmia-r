@@ -106,6 +106,9 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
 
 #' Creates a new Algorithmia Client which you can use to call algorithms and
 #' interact with directories and files in the Algorithmia data API.
+#' Sample usage:
+#' client <- getAlgorithmiaClient() # Do not pass an API KEY inside an algorithm.
+#' client <- getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.
 #'
 #' @param apiKey The Algorithmia API key. You need to set this when you are
 #' interacting with Algorithmia outside of an algorithm. To find your
@@ -116,10 +119,6 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
 #' explicitly set.
 #'
 #' @return A new AlgorithmiaClient object
-#'
-#' @examples
-#' client <- getAlgorithmiaClient() # Do not pass an API KEY inside an algorithm.
-#' client <- getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.
 getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_) {
   AlgorithmiaClient$new(apiKey=apiKey, apiAddress=getAlgorithmiaApiAddress(apiAddress))
 }

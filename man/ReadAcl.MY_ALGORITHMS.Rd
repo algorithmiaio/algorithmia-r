@@ -3,15 +3,17 @@
 \docType{data}
 \name{ReadAcl.MY_ALGORITHMS}
 \alias{ReadAcl.MY_ALGORITHMS}
-\title{The ACL that allows your algorithms to read an item.}
+\title{The ACL that allows your algorithms to read an item.
+Sample usage:
+dataDirectory$create(ReadAcl.MY_ALGORITHMS)
+dataDirectory$updatePermissions(ReadAcl.MY_ALGORITHMS)}
 \format{An object of class \code{AlgorithmiaAcl} of length 1.}
 \usage{
 ReadAcl.MY_ALGORITHMS
 }
 \description{
 The ACL that allows your algorithms to read an item.
-}
-\examples{
+Sample usage:
 dataDirectory$create(ReadAcl.MY_ALGORITHMS)
 dataDirectory$updatePermissions(ReadAcl.MY_ALGORITHMS)
 }

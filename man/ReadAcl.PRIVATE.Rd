@@ -3,15 +3,17 @@
 \docType{data}
 \name{ReadAcl.PRIVATE}
 \alias{ReadAcl.PRIVATE}
-\title{The ACL that allows only you to read an item.}
+\title{The ACL that allows only you to read an item.
+Sample usage:
+dataDirectory$create(ReadAcl.PRIVATE)
+dataDirectory$updatePermissions(ReadAcl.PRIVATE)}
 \format{An object of class \code{AlgorithmiaAcl} of length 1.}
 \usage{
 ReadAcl.PRIVATE
 }
 \description{
 The ACL that allows only you to read an item.
-}
-\examples{
+Sample usage:
 dataDirectory$create(ReadAcl.PRIVATE)
 dataDirectory$updatePermissions(ReadAcl.PRIVATE)
 }
