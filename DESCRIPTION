@@ -5,8 +5,11 @@ Version: 0.0.1
 Date: 2016-08-07
 Author: James Athappilly
 Maintainer: James Athappilly <jamesa@algorithmia.com>
-Description: Allows you to call algorithms in the Algorithmia platform and
-    access their Data API
+Description: Algorithmia houses the largest marketplace of online algorithms.
+    This package essentially holds a bunch of REST wrappers that make it very
+    easy to call algorithms in the Algorithmia platform and access files and
+    directories in the Algorithmia data API. To learn more about the services
+    they offer and the algorithms in the platform visit http://algorithmia.com.
 Depends:
     R (>= 3.3.1),
     methods (>= 2.5.0)
@@ -25,4 +28,5 @@ Imports:
     httr,
     rjson,
     xml2
+BugReports: https://github.com/algorithmiaio/algorithmia-r/issues
 RoxygenNote: 5.0.1.9000
