@@ -1,7 +1,5 @@
 #' @include Client.r
 
-library("methods")
-
 getAlgorithmUrl <- function(input) {
   if (!(is.character(input) && length(input) == 1)) {
     stop("algorithm path needs to be a string")
@@ -34,6 +32,18 @@ getResponse <- function(response) {
   response
 }
 
+#' Algorithm object which enables you to call Algorithmia algorithms.
+#'
+#' @field client
+#' @field algoUrl
+#' @field queryParameters Mutable list of parameters to use while making
+#'        algorithm calls. These can be changed by calling setOptions.
+#' @field pipe Calls an algorithm with the input provided.
+#' @field setOptions Allows you to set the timeout duration (in seconds),
+#'        whether you want the stdout that was produced while running the
+#'        algorithm (this only works when the algorithm author call it), and
+#'        whether this should run as async (output = "void") or in raw mode
+#'        (output = "raw")
 AlgorithmiaAlgorithm <- methods::setRefClass("AlgorithmiaAlgorithm",
   field = list(client = "AlgorithmiaClient", algoUrl = "character", queryParameters = "list"),
   methods = list(

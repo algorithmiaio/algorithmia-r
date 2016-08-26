@@ -1,8 +1,3 @@
-library("methods")
-
-# TODO(james): you should really unit test this since, you know...
-# best practices and all that jazz. But maybe Allison won't find out
-# There are some indirect tests in DataDirectoryTest
 AlgorithmiaAcl <- methods::setRefClass("AlgorithmiaAcl",
     fields = list(read_acl = "character"),
     methods = list(
@@ -38,6 +33,11 @@ getAcl <- function(response) {
     }
 }
 
+#' The ACL that allows anyone to read an item
 ReadAcl.PUBLIC <- getAcl(list(read=list("user://*")))
+
+#' The ACL that allows only you to read an item
 ReadAcl.PRIVATE <- getAcl(list(read=list()))
+
+#' The ACL that allows your algorithms to read an item
 ReadAcl.MY_ALGORITHMS <- getAcl(list(read=list("algo://.my/*")))

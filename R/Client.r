@@ -1,9 +1,3 @@
-# Algorithmia Client
-library("base64enc")
-library("httr")
-library("rjson")
-library("methods")
-
 DEFAULT_ALGORITHMIA_API_ADDRESS <- "https://api.algorithmia.com"
 
 getAlgorithmiaApiAddress <- function(apiAddress=NA_character_) {
@@ -16,6 +10,25 @@ getAlgorithmiaApiAddress <- function(apiAddress=NA_character_) {
   }
 }
 
+#' Client object which makes it easy to interact with the Algorithmia REST API.
+#'
+#' @field apiKey The API key used when making REST calls to Algorithmia. This
+#'        should NOT be set inside algorithms.
+#' @field apiAddress The Algorithmia API address. In most cases you don't need
+#'        set this explicitly since the default will talk to the correct
+#'        Algorithmia API server
+#' @field algo A function that takes an algorithm reference  and returns an
+#         AlgorithmiaAlgorithm object. An algorithm reference is a string of the
+#         form [Algorithm Author]/[Algorithm Name] like: "demo/Hello").
+#'        AlgorithmiaAlgorithm objects are used to call algorithms with data.
+#' @field file A function that takes a path to a file and returns a
+#'        AlgorithmiaDataFile object. Data paths are described in detail at:
+#         http://docs.algorithmia.com/?java#data-api-specification.
+#'        AlgorithmiaDataFile objects are used to read and write files.
+#' @field dir A function that takes a path to a directory and returns a
+#'        AlgorithmiaDataDirectory object. Data paths are described in detail at:
+#         http://docs.algorithmia.com/?java#data-api-specification.
+#'        AlgorithmiaDataDirectory objects are used to interact with directories.
 AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
   fields = list(apiKey = "character", apiAddress = "character"),
   methods = list(
@@ -92,6 +105,17 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
   )
 )
 
+#' Creates a new Algorithmia Client which you can use to call algorithms and
+#' interact with directories and files in the data API.
+#'
+#' @param apiKey The Algorithmia API key. You need to set this when you are
+#'        interacting with Algorithmia outside of an algorithm. To find your
+#'        Algorithmia API key visit: https://algorithmia.com/users/[YOUR USER NAME]
+#' @param apiAddress The Algorithmia API address. Normal users should not set
+#         this. This defaults to "https://api.algorithmia.com" when it is not
+#         explicitly set.
+#'
+#' @return A new AlgorithmiaClient object
 getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_) {
   AlgorithmiaClient$new(apiKey=apiKey, apiAddress=getAlgorithmiaApiAddress(apiAddress))
 }

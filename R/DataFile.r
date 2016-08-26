@@ -1,9 +1,5 @@
 #' @include Client.r
 
-library("methods")
-library("httr")
-library("rjson")
-
 AlgorithmiaDataFile <- methods::setRefClass("AlgorithmiaDataFile",
   field = list(client = "AlgorithmiaClient", dataFileUrl = "character", last_modified = "ANY", size = "numeric"),
   methods = list(

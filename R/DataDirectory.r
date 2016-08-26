@@ -1,7 +1,5 @@
 #' @include Client.r
 
-library("methods")
-
 DATA_OBJECT_TYPE_FILE <- "FILE"
 DATA_OBJECT_TYPE_DIRECTORY <- "DIRECTORY"
 
