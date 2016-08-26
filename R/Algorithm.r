@@ -33,21 +33,19 @@ getResponse <- function(response) {
 }
 
 #' Algorithm object which enables you to call Algorithmia algorithms.
+#' To create one, call: `client$algo("algoUrl")`
 #'
-#' @field client
-#' @field algoUrl
+#' @field client Reference to the AlgorithmiaClient object that has the credentials
+#'        necessary to make API calls.
+#' @field algoUrl The unique identifier for an algorithm. Follows the pattern:
+#'        [Algorithm Author]/[Algorithm Name]/[Optional Version] like: 'demo/Hello/0.1.1'.
 #' @field queryParameters Mutable list of parameters to use while making
 #'        algorithm calls. These can be changed by calling setOptions.
-#' @field pipe Calls an algorithm with the input provided.
-#' @field setOptions Allows you to set the timeout duration (in seconds),
-#'        whether you want the stdout that was produced while running the
-#'        algorithm (this only works when the algorithm author call it), and
-#'        whether this should run as async (output = "void") or in raw mode
-#'        (output = "raw")
 AlgorithmiaAlgorithm <- methods::setRefClass("AlgorithmiaAlgorithm",
   field = list(client = "AlgorithmiaClient", algoUrl = "character", queryParameters = "list"),
   methods = list(
     pipe = function(input) {
+      "Calls an algorithm with the input provided."
       if (queryParameters$output == "default") {
         getResponse(client$postJsonHelper(algoUrl, input, queryParameters))
       } else if (queryParameters$output == "void") {
@@ -59,6 +57,10 @@ AlgorithmiaAlgorithm <- methods::setRefClass("AlgorithmiaAlgorithm",
       }
     },
     setOptions = function(timeout=300, stdout=FALSE, output="default", parameters=list()) {
+      "Allows you to set the timeout duration (in seconds), whether you want the stdout
+       that was produced while running the algorithm (this only works when the algorithm
+       author call it), and whether this should run as async (output = 'void') or in
+       raw mode (output = 'raw')."
       queryParameters <<- list(timeout=timeout, stdout=stdout)
       queryParameters <<- modifyList(queryParameters, parameters)
       queryParameters["output"] <<- output

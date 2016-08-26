@@ -1,3 +1,4 @@
+#' Internal class used to describe ACLs.
 AlgorithmiaAcl <- methods::setRefClass("AlgorithmiaAcl",
     fields = list(read_acl = "character"),
     methods = list(
@@ -33,11 +34,20 @@ getAcl <- function(response) {
     }
 }
 
-#' The ACL that allows anyone to read an item
+#' The ACL that allows anyone to read an item.
+#' @examples
+#' dataDirectory$create(ReadAcl.PUBLIC)
+#' dataDirectory$updatePermissions(ReadAcl.PUBLIC)
 ReadAcl.PUBLIC <- getAcl(list(read=list("user://*")))
 
-#' The ACL that allows only you to read an item
+#' The ACL that allows only you to read an item.
+#' @examples
+#' dataDirectory$create(ReadAcl.PRIVATE)
+#' dataDirectory$updatePermissions(ReadAcl.PRIVATE)
 ReadAcl.PRIVATE <- getAcl(list(read=list()))
 
-#' The ACL that allows your algorithms to read an item
+#' The ACL that allows your algorithms to read an item.
+#' @examples
+#' dataDirectory$create(ReadAcl.MY_ALGORITHMS)
+#' dataDirectory$updatePermissions(ReadAcl.MY_ALGORITHMS)
 ReadAcl.MY_ALGORITHMS <- getAcl(list(read=list("algo://.my/*")))
