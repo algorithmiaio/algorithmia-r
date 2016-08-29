@@ -1,0 +1,55 @@
+---
+title: "Introduction to the Algorithmia R client"
+author: "James Athappilly"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Algorithmia houses the largest marketplace of online algorithms. They make it easy for software developers to create algorithms and host them as microservices that anyone can call. This R package can be used by others to call algorithms hosted on the Algorithmia platform and interact with files through their data API. This package can also be used inside R algorithms. The only difference is how you create the client. More documention and information about algorithms on the Algorithmia platform can be found at http://algorithmia.com.
+
+## Creating a new Algorithmia Client
+
+To do anything with the Algorithmia platform you first need to create a client.
+
+```r
+client <- getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Not running in Algorithmia
+```
+
+If you are developing an Algorithma algorithm and want to call another algorithm in their platorm, you need to make this call without the API key argument passed in.
+
+```r
+client <- getAlgorithmiaClient() # Do this when you are inside an Algorithmia Algorithm
+```
+
+
+## Calling an Algorithmia Algorithm
+
+Once you have a client, you can call algorithms in the Algorithmia marketplace. Algorithms are uniquely identified by a string of the form [ALGORITHM AUTHOR]/[ALGORITHM NAME]/[OPTIONAL VERSION]. An example of this would be the algorithm called "Hello" by the user "demo" - the information about this algorithm can be found here: https://algorithmia.com/algorithms/demo/Hello. The unique identifier for this algorithm is "demo/Hello". By default, if you don't pass a specific version, the latest published version will be called. If you want to peg the version, use the full algorithm identifier "demo/Hello/0.1.1". Once you know the algorithm you want to call, create the algorithm object and pass the data you want the algorithm to run on. The response is a list with a named member called result that is the output of the algorithm.
+
+```r
+algo <- client$algo("demo/Hello") # Creating the algorithm object which can be used for multiple algorithm calls
+result <- algo$pipe("sample input")$result # Calling the "demo/Hello" algorithm with the input of the algorithm being the string "sample input"
+result == "Hello sample input" # evaluates to TRUE
+```
+
+
+## Creating a file in the Algorithmia Data API
+
+Writing a file is as simple as creating a directory and putting data into a file. Here is an example that takes an R object, json encodes it and puts it in a file called "data.txt" in your directory called "Rfolder".
+
+```r
+dataDirectory <- client$dir("data://.my/Rfolder") # Get the Algorithma directory object
+if (!dataDirectory$exists()) { # Check that the directory exists
+  dataDirectory$create() # If it doesn't, create it
+}
+f <- dataDirectory$file("data.txt") # Get the Algorithmia file object
+f$putJson(myObject) # Encodes the object as json and writes that to the file, overwriting it if it exists and creating it if it doesn't
+```
+
+## More Documentation
+
+To learn more about the Algorithmia platform and all the latest developer news, visit http://developers.algorithmia.com.
