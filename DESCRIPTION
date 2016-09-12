@@ -1,7 +1,7 @@
 Package: algorithmia
 Type: Package
 Title: Allows you to Easily Interact with the Algorithmia Platform
-Version: 0.0.1
+Version: 0.0.2
 Date: 2016-08-07
 Author: James Athappilly
 Maintainer: James Athappilly <jamesa@algorithmia.com>
