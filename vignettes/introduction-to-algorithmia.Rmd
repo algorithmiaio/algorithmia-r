@@ -1,10 +1,10 @@
 ---
-title: "Introduction to the Algorithmia R client"
+title: "Introduction to the Algorithmia R Client"
 author: "James Athappilly"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Introduction to the Algorithmia R Client}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
