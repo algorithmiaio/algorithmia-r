@@ -67,7 +67,10 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       inputJson <- NULL
       headers <- getBasicHeaders()
 
-      if (is.null(input) || is.na(input)) {
+      if (is.list(input) && length(input) == 0) {
+        inputJson <- "[]"
+        headers["Content-Type"] <- 'application/json'
+      } else if (is.null(input) || is.na(input)) {
         inputJson <- rjson::toJSON(NULL)
         headers["Content-Type"] <- 'application/json'
       } else if (is.raw(input)) {
