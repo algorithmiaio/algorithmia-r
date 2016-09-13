@@ -24,7 +24,7 @@ Creates a new Algorithmia Client which you can use to call algorithms and
 interact with directories and files in the Algorithmia data API.
 }
 \examples{
-client <- algorithmia::getAlgorithmiaClient()                           # Do not pass an API KEY inside an algorithm.
-client <- algorithmia::getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.
+client <- algorithmia::getAlgorithmiaClient() # Inside an Algorithmia algorithm
+client <- algorithmia::getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Everywhere else
 }
 

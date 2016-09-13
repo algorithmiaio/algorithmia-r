@@ -121,8 +121,8 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
 #' @return A new AlgorithmiaClient object
 #'
 #' @examples
-#' client <- algorithmia::getAlgorithmiaClient()                           # Do not pass an API KEY inside an algorithm.
-#' client <- algorithmia::getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.
+#' client <- algorithmia::getAlgorithmiaClient() # Inside an Algorithmia algorithm
+#' client <- algorithmia::getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Everywhere else
 getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_) {
   AlgorithmiaClient$new(apiKey=apiKey, apiAddress=getAlgorithmiaApiAddress(apiAddress))
 }
