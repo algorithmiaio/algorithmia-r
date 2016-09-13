@@ -2,7 +2,7 @@ Package: algorithmia
 Type: Package
 Title: Allows you to Easily Interact with the Algorithmia Platform
 Version: 0.0.2
-Date: 2016-08-07
+Date: 2016-09-12
 Author: James Athappilly
 Maintainer: James Athappilly <jamesa@algorithmia.com>
 Description: The company, Algorithmia, houses the largest marketplace of online
