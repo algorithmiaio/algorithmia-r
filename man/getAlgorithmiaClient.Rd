@@ -3,10 +3,7 @@
 \name{getAlgorithmiaClient}
 \alias{getAlgorithmiaClient}
 \title{Creates a new Algorithmia Client which you can use to call algorithms and
-interact with directories and files in the Algorithmia data API.
-Sample usage:
-client <- getAlgorithmiaClient() # Do not pass an API KEY inside an algorithm.
-client <- getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.}
+interact with directories and files in the Algorithmia data API.}
 \usage{
 getAlgorithmiaClient(apiKey = NA_character_, apiAddress = NA_character_)
 }
@@ -25,8 +22,9 @@ A new AlgorithmiaClient object
 \description{
 Creates a new Algorithmia Client which you can use to call algorithms and
 interact with directories and files in the Algorithmia data API.
-Sample usage:
-client <- getAlgorithmiaClient() # Do not pass an API KEY inside an algorithm.
-client <- getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.
+}
+\examples{
+client <- algorithmia::getAlgorithmiaClient()                           # Do not pass an API KEY inside an algorithm.
+client <- algorithmia::getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Do this outside an algorithm.
 }
 
