@@ -9,3 +9,5 @@ runTestFile("ClientTest.r")
 runTestFile("AlgorithmTest.r")
 runTestFile("DataFileTest.r")
 runTestFile("DataDirectoryTest.r")
+runTestFile("AlgorithmHandlerTest.r")
+
