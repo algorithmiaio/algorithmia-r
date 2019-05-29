@@ -46,7 +46,7 @@ test.checkTimeout <-function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
   algorithm <- client$algo("algo://testing/Sleep")
   algorithm$setOptions(timeout=2)
-  checkException(algorithm$pipe(10))
+  checkException(algorithm$pipe(100))
 }
 
 test.runWithNULLInputOutput <-function() {
