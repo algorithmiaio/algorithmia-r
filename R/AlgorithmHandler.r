@@ -46,7 +46,11 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                                 input <- rjson::fromJSON(line)
                                                 inputData <- getInputData_(input)
                                                 stage <- "algorithm"
-                                                output <- applyMethod(inputData)
+                                                if(is.null(context)){
+                                                  output <- applyMethod(inputData)
+                                                } else {
+                                                  output <- applyMethod(inputData, context)
+                                                }
                                                 getResponseObject_(output)
                                               },
                                               error = function(e) {
@@ -59,10 +63,12 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                               response = getResponseAsJsonString_(output)
                                               writeLines(response, con=outputFile)
                                             }
+                                            close(outputFile)
+                                            close(inputFile)
                                            }
                                          ))
 
 
-getAlgorithmHandler <- function(applyfunc, onLoadMethod=function(){}, pipe='stdin'){
+getAlgorithmHandler <- function(applyfunc, onLoadMethod=function(){NULL}, pipe='stdin'){
   AlgorithmHandler$new(applyMethod=applyfunc, onLoadMethod=onLoadMethod, pipe_name=pipe)
 }
