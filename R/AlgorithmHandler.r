@@ -54,7 +54,9 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                                 getResponseObject_(output)
                                               },
                                               error = function(e) {
-                                                list(error=list(message=toString(e), stacktrace=stage, error_type="AlgorithmError"))
+                                                message <- toString(e)
+                                                formatted <- gsub("\n", "", message)
+                                                list(error=list(message=formatted, stacktrace=stage, error_type="AlgorithmError"))
                                               })
                                               
                                               # Flush stdout before writing back response

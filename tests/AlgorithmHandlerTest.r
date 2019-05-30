@@ -1,5 +1,6 @@
 library("RUnit")
 library("tools")
+library("rjson")
 
 beforeTest <- function(){
     system('touch /tmp/algoout')
@@ -13,11 +14,12 @@ readPipe <- function(){
   p_out <- fifo('/tmp/algoout', 'r')
   result <-readLines(p_out)
   close(p_out)
-  result
+  rjson::fromJSON(result)
 }
 
 test.runHelloWorld <- function(){
-  expected <- "{\"result\":\"hello james\",\"metadata\":{\"content_type\":\"text\"}}"
+  expected <- list(result="hello james", metadata=list(content_type="text"))
+  #expected <- "{\"result\":\"hello james\",\"metadata\":{\"content_type\":\"text\"}}"
   con <- "input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
@@ -31,7 +33,8 @@ test.runHelloWorld <- function(){
 }
 
 test.runHelloWithJson <- function(){
-  expected <- "{\"result\":\"hello james\",\"metadata\":{\"content_type\":\"text\"}}"
+  expected <- list(result="hello james", metadata=list(content_type="text"))
+  #expected <- "{\"result\":\"hello james\",\"metadata\":{\"content_type\":\"text\"}}"
   con = "input/hello_json.json"
   algorithm <- function(input){
     paste("hello", input$name)
@@ -46,7 +49,9 @@ test.runHelloWithJson <- function(){
 
 
 test.runWithContext <- function(){
-  expected <- "{\"result\":\"hello james here is your file /tmp/example\",\"metadata\":{\"content_type\":\"text\"}}"
+  expected <- list(result="hello james here is your file /tmp/example",
+                   metadata=list(content_type="text"))
+  #expected <- "{\"result\":\"hello james here is your file /tmp/example\",\"metadata\":{\"content_type\":\"text\"}}"
   con = "input/hello_world.json"
   algorithm <- function(input, context){
     if(is.null(context)){
@@ -69,8 +74,17 @@ test.runWithContext <- function(){
   checkEquals(result, expected)
 }
 
-test.runWithoutContext <- function(){
-  
+test.throwsException <- function(){
+  expected <- list(error=list(message="Error in applyMethod(inputData): an exception was thrown",
+                   stacktrace="algorithm", error_type="AlgorithmError"))
+  con = "input/hello_world.json"
+  algorithm <- function(input){
+    stop("an exception was thrown")
+  }
+  beforeTest()
+  handler <- getAlgorithmHandler(algorithm, pipe=con)
+  handler$run()
+  result <- readPipe()
+  afterTest()
+  checkEquals(result, expected)
 }
-
-
