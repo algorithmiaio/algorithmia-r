@@ -3,7 +3,7 @@ library("rjson")
 AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                          fields = list(applyMethod = "function",
                                                        onLoadMethod = "function",
-                                                       context = "list"),
+                                                       pipe_name = "character"),
                                          methods = list(
                                            run = function(){
                                              getInputData_ <- function(input) {
@@ -32,12 +32,12 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                                })
                                              }
                                              
-                                            self.context <- self.onLoadMethod()
+                                            context <- onLoadMethod()
                                             print("PIPE_INIT_COMPLETE")
                                             flush.console()
                                             
-                                            outputFile <- fifo("/tmp/algoout", blocking=TRUE)
-                                            inputFile <- file("stdin")
+                                            outputFile <- file("/tmp/algoout")
+                                            inputFile <- file(pipe_name)
                                             open(inputFile)
                                             
                                             while (length(line <- readLines(inputFile, n=1)) > 0) {
@@ -46,7 +46,7 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                                 input <- rjson::fromJSON(line)
                                                 inputData <- getInputData_(input)
                                                 stage <- "algorithm"
-                                                output <- self.applyMethod(inputData)
+                                                output <- applyMethod(inputData)
                                                 getResponseObject_(output)
                                               },
                                               error = function(e) {
@@ -63,6 +63,6 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                          ))
 
 
-getAlgorithmHandler <- function(applyfunc, onLoadMethod=function(){}){
-  AlgorithmHandler$new(applyMethod=applyfunc, onLoadMethod=onLoadMethod, context=list())
+getAlgorithmHandler <- function(applyfunc, onLoadMethod=function(){}, pipe='stdin'){
+  AlgorithmHandler$new(applyMethod=applyfunc, onLoadMethod=onLoadMethod, pipe_name=pipe)
 }

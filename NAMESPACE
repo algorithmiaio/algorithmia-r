@@ -1,5 +1,5 @@
 export(
-    "getAlgorithmiaClient",
+    "getAlgorithmiaClient", "getAlgorithmHandler",
     "ReadAcl.PUBLIC", "ReadAcl.PRIVATE", "ReadAcl.MY_ALGORITHMS",
     "AlgorithmiaAlgorithm", "AlgorithmiaClient", "AlgorithmiaDataFile",
     "AlgorithmiaDataDirectory", "AlgorithmiaDirectoryIterator")

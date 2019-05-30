@@ -1,4 +1,5 @@
 #install.packages("RUnit")
+#install.packages("devtools")
 #library(devtools)
 #install("..")
 library("algorithmia")

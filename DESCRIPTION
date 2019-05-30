@@ -25,6 +25,7 @@ Collate:
     'DataDirectory.r'
     'DataFile.r'
     'data_utilities.r'
+    'AlgorithmHandler.r'
 Imports:
     base64enc,
     httr,
