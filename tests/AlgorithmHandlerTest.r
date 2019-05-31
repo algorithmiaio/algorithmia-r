@@ -14,12 +14,12 @@ readPipe <- function(){
   p_out <- fifo('/tmp/algoout', 'r')
   result <-readLines(p_out)
   close(p_out)
+  print(result)
   rjson::fromJSON(result)
 }
 
 test.runHelloWorld <- function(){
   expected <- list(result="hello james", metadata=list(content_type="text"))
-  #expected <- "{\"result\":\"hello james\",\"metadata\":{\"content_type\":\"text\"}}"
   con <- "input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
@@ -34,7 +34,6 @@ test.runHelloWorld <- function(){
 
 test.runHelloWithJson <- function(){
   expected <- list(result="hello james", metadata=list(content_type="text"))
-  #expected <- "{\"result\":\"hello james\",\"metadata\":{\"content_type\":\"text\"}}"
   con = "input/hello_json.json"
   algorithm <- function(input){
     paste("hello", input$name)
@@ -51,7 +50,6 @@ test.runHelloWithJson <- function(){
 test.runWithContext <- function(){
   expected <- list(result="hello james here is your file /tmp/example",
                    metadata=list(content_type="text"))
-  #expected <- "{\"result\":\"hello james here is your file /tmp/example\",\"metadata\":{\"content_type\":\"text\"}}"
   con = "input/hello_world.json"
   algorithm <- function(input, context){
     if(is.null(context)){
@@ -74,12 +72,13 @@ test.runWithContext <- function(){
   checkEquals(result, expected)
 }
 
-test.throwsException <- function(){
-  expected <- list(error=list(message="Error in applyMethod(inputData): an exception was thrown",
+#TODO: figure out if we want to improve this error message (do we need the applyMethod(inputData) wrapper?)
+test.algorithmThrowsException <- function(){
+  expected <- list(error=list(message="Error in applyMethod(inputData): a runtime exception was thrown",
                    stacktrace="algorithm", error_type="AlgorithmError"))
   con = "input/hello_world.json"
   algorithm <- function(input){
-    stop("an exception was thrown")
+    stop("a runtime exception was thrown")
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe=con)
@@ -88,3 +87,42 @@ test.throwsException <- function(){
   afterTest()
   checkEquals(result, expected)
 }
+
+#TODO: figure out if we want to improve this error message
+test.arityProblemWithContextThrowsException <- function(){
+  expected <- list(error=list(message="Error in applyMethod(inputData, state): unused argument (state)",
+                              stacktrace="algorithm", error_type="AlgorithmError"))
+  con = "input/hello_world.json"
+  algorithm <- function(input){
+    paste("hello", input)
+  }
+  loader <- function(){
+    state <- list(foo="bar")
+  }
+  beforeTest()
+  handler <- getAlgorithmHandler(algorithm, loader, pipe=con)
+  handler$run()
+  result <- readPipe()
+  afterTest()
+  checkEquals(result, expected)
+}
+
+test.loaderThrowsException <- function(){
+  expected <- list(error=list(message="Error in onLoadMethod(): a load time exception was thrown",
+                              stacktrace="loading", error_type="AlgorithmError"))
+  con = "input/hello_world.json"
+  algorithm <- function(input){
+    paste("hello", input)
+  }
+  loader <- function(){
+    stop("a load time exception was thrown")
+  }
+  beforeTest()
+  handler <- getAlgorithmHandler(algorithm, loader, pipe=con)
+  handler$run()
+  result <- readPipe()
+  afterTest()
+  checkEquals(result, expected)
+}
+
+

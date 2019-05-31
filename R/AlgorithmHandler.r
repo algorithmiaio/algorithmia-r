@@ -28,28 +28,41 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                                },
                                                error = function(e) {
                                                  print(paste0("Error in getResponse: ", e))
-                                                 rjson::toJSON(list(error=list(message=toString(e), stacktrace="pipe.r:getResponseAsJsonString", error_type="AlgorithmError")))
+                                                 rjson::toJSON(list(error=list(message=toString(e),
+                                                                               stacktrace="pipe.r:getResponseAsJsonString", error_type="AlgorithmError")))
                                                })
                                              }
-                                             
-                                            context <- onLoadMethod()
-                                            print("PIPE_INIT_COMPLETE")
-                                            flush.console()
-                                            
+                                            runLoad_ <- function(){
+                                              state <- onLoadMethod()
+                                              print("PIPE_INIT_COMPLETE")
+                                              flush.console()
+                                              state
+                                            }
                                             outputFile <- file("/tmp/algoout")
                                             inputFile <- file(pipe_name)
                                             open(inputFile)
-                                            
+                                            result <- tryCatch({
+                                            stage <- "loading"
+                                            state <- runLoad_()
+                                            list(state=state)
+                                            },
+                                            error = function(e){
+                                              message <- toString(e)
+                                              formatted <- gsub("\n", "", message)
+                                              list(error=list(message=formatted, stacktrace=stage, error_type="AlgorithmError"))
+                                            })
+                                            if(is.null(result$error)){
+                                            state <- result$state
                                             while (length(line <- readLines(inputFile, n=1)) > 0) {
                                               stage <- "parsing"
                                               output <- tryCatch({
                                                 input <- rjson::fromJSON(line)
                                                 inputData <- getInputData_(input)
                                                 stage <- "algorithm"
-                                                if(is.null(context)){
+                                                if(is.null(state)){
                                                   output <- applyMethod(inputData)
                                                 } else {
-                                                  output <- applyMethod(inputData, context)
+                                                  output <- applyMethod(inputData, state)
                                                 }
                                                 getResponseObject_(output)
                                               },
@@ -63,6 +76,12 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                               flush.console()
                                               
                                               response = getResponseAsJsonString_(output)
+                                              writeLines(response, con=outputFile)
+                                            }
+                                            } else{
+                                              # Flush stdout before writing back response
+                                              flush.console()
+                                              response = getResponseAsJsonString_(result)
                                               writeLines(response, con=outputFile)
                                             }
                                             close(outputFile)
