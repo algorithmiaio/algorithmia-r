@@ -5,7 +5,7 @@ AlgorithmHandler <- methods::setRefClass("AlgorithmHandler",
                                                        onLoadMethod = "function",
                                                        pipe_name = "character"),
                                          methods = list(
-                                           run = function(){
+                                           serve = function(){
                                              getInputData_ <- function(input) {
                                                if (input$content_type == "binary") {
                                                  base64enc::base64decode(input$data)

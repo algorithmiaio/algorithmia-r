@@ -26,7 +26,7 @@ test.runHelloWorld <- function(){
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe=con)
-  handler$run()
+  handler$serve()
   result <- readPipe()
   afterTest()
   checkEquals(result, expected)
@@ -40,7 +40,7 @@ test.runHelloWithJson <- function(){
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe=con)
-  handler$run()
+  handler$serve()
   result <- readPipe()
   afterTest()
   checkEquals(result, expected)
@@ -66,7 +66,7 @@ test.runWithContext <- function(){
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, loader, pipe=con)
-  handler$run()
+  handler$serve()
   result <- readPipe()
   afterTest()
   checkEquals(result, expected)
@@ -82,7 +82,7 @@ test.algorithmThrowsException <- function(){
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe=con)
-  handler$run()
+  handler$serve()
   result <- readPipe()
   afterTest()
   checkEquals(result, expected)
@@ -101,7 +101,7 @@ test.arityProblemWithContextThrowsException <- function(){
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, loader, pipe=con)
-  handler$run()
+  handler$serve()
   result <- readPipe()
   afterTest()
   checkEquals(result, expected)
@@ -119,7 +119,7 @@ test.loaderThrowsException <- function(){
   }
   beforeTest()
   handler <- getAlgorithmHandler(algorithm, loader, pipe=con)
-  handler$run()
+  handler$serve()
   result <- readPipe()
   afterTest()
   checkEquals(result, expected)
