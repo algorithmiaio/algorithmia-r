@@ -34,7 +34,7 @@ getResponseAsJsonString_ <- function(output) {
       ))
     })
   }
-runLoad_ <- function() {
+runLoad_ <- function(onLoadMethod) {
   state <- onLoadMethod()
   print("PIPE_INIT_COMPLETE")
   flush.console()
@@ -58,14 +58,12 @@ AlgorithmHandler <- methods::setRefClass(
           input$data
         }
       }
-      outputFile <-
-        file("/tmp/algoout")
-      inputFile <-
-        file(pipeName)
+      outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
+      inputFile <- file(pipeName)
       open(inputFile)
       result <- tryCatch({
         stage <- "loading"
-        state <- runLoad_()
+        state <- runLoad_(onLoadMethod)
         list(state = state)
       },
       error = function(e) {
@@ -110,18 +108,18 @@ AlgorithmHandler <- methods::setRefClass(
           flush.console()
           
           response = getResponseAsJsonString_(output)
-          writeLines(response, con =
-                       outputFile)
+          print("before write")
+          writeLines(response, con = outputFile)
+          print("after write")
         }
       } else{
         # Flush stdout before writing back response
         flush.console()
         response = getResponseAsJsonString_(result)
-        writeLines(response, con =
-                     outputFile)
+        writeLines(response, con = outputFile)
       }
-      close(outputFile)
       close(inputFile)
+      close(outputFile)
     }
   )
 )
@@ -136,6 +134,6 @@ getAlgorithmHandler <-
     AlgorithmHandler$new(
       applyMethod = applyfunc,
       onLoadMethod = onLoadMethod,
-      pipe_name = pipe
+      pipeName = pipe
     )
   }

@@ -3,17 +3,17 @@ library("tools")
 library("rjson")
 
 beforeTest <- function() {
-  system('touch /tmp/algoout')
+  system('mkfifo /tmp/algoout')
+  fifo('/tmp/algoout', 'r')
 }
 
 afterTest <- function() {
   system('rm /tmp/algoout')
 }
 
-readPipe <- function() {
-  p_out <- fifo('/tmp/algoout', 'r')
-  result <- readLines(p_out)
-  close(p_out)
+readPipe <- function(fifoPipe) {
+  result <- readLines(fifoPipe)
+  close(fifoPipe)
   print(result)
   rjson::fromJSON(result)
 }
@@ -26,10 +26,10 @@ test.runHelloWorld <- function() {
   algorithm <- function(input) {
     paste("hello", input)
   }
-  beforeTest()
+  out <- beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe = con)
   handler$serve()
-  result <- readPipe()
+  result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
@@ -42,10 +42,10 @@ test.runHelloWithJson <- function() {
   algorithm <- function(input) {
     paste("hello", input$name)
   }
-  beforeTest()
+  out <- beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe = con)
   handler$serve()
-  result <- readPipe()
+  result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
@@ -69,10 +69,10 @@ test.runWithContext <- function() {
     context$example = "/tmp/example"
     context
   }
-  beforeTest()
+  out <- beforeTest()
   handler <- getAlgorithmHandler(algorithm, loader, pipe = con)
   handler$serve()
-  result <- readPipe()
+  result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
@@ -91,10 +91,10 @@ test.algorithmThrowsException <- function() {
   algorithm <- function(input) {
     stop("a runtime exception was thrown")
   }
-  beforeTest()
+  out <- beforeTest()
   handler <- getAlgorithmHandler(algorithm, pipe = con)
   handler$serve()
-  result <- readPipe()
+  result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
@@ -116,10 +116,10 @@ test.arityProblemWithContextThrowsException <- function() {
   loader <- function() {
     state <- list(foo = "bar")
   }
-  beforeTest()
+  out <- beforeTest()
   handler <- getAlgorithmHandler(algorithm, loader, pipe = con)
   handler$serve()
-  result <- readPipe()
+  result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
@@ -141,10 +141,10 @@ test.loaderThrowsException <- function() {
   loader <- function() {
     stop("a load time exception was thrown")
   }
-  beforeTest()
+  out <- beforeTest()
   handler <- getAlgorithmHandler(algorithm, loader, pipe = con)
   handler$serve()
-  result <- readPipe()
+  result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
