@@ -1,8 +1,6 @@
 library("base64enc")
 library("rjson")
 
-
-
 getResponseObject_ <- function(output) {
     if (typeof(output) == "raw") {
       list(
@@ -17,6 +15,7 @@ getResponseObject_ <- function(output) {
            metadata = list(content_type = "json"))
     }
   }
+
 getResponseAsJsonString_ <- function(output) {
     tryCatch({
       rjson::toJSON(output)
@@ -32,13 +31,13 @@ getResponseAsJsonString_ <- function(output) {
       ))
     })
   }
+
 runLoad_ <- function(onLoadMethod) {
   state <- onLoadMethod()
   print("PIPE_INIT_COMPLETE")
   flush.console()
   state
 }
-
 
 AlgorithmHandler <- methods::setRefClass(
   "AlgorithmHandler",
@@ -124,7 +123,6 @@ AlgorithmHandler <- methods::setRefClass(
     }
   )
 )
-
 
 getAlgorithmHandler <-function(applyfunc, onLoadMethod = function() {NULL}, pipe = 'stdin') {
     AlgorithmHandler$new(
