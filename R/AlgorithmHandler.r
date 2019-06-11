@@ -9,8 +9,7 @@ getResponseObject_ <- function(output) {
         result = base64enc::base64encode(output),
         metadata = list(content_type = "binary")
       )
-    } else if (is.character(output) &
-               length(output) == 1) {
+    } else if (is.character(output) & length(output) == 1) {
       list(result = output,
            metadata = list(content_type = "text"))
     } else {
@@ -27,8 +26,7 @@ getResponseAsJsonString_ <- function(output) {
       rjson::toJSON(list(
         error = list(
           message = toString(e),
-          stacktrace =
-            "pipe.r:getResponseAsJsonString",
+          stacktrace = "pipe.r:getResponseAsJsonString",
           error_type = "AlgorithmError"
         )
       ))
@@ -81,8 +79,7 @@ AlgorithmHandler <- methods::setRefClass(
       #Finished loading, check if we failed and if not - start main algorithm loop
       if (is.null(loadResult$error)) {
         state <- loadResult$state
-        while (length(line <-
-                      readLines(inputFile, n = 1)) > 0) {
+        while (length(line <- readLines(inputFile, n = 1)) > 0) {
           stage <- "parsing"
           output <- tryCatch({
             input <- rjson::fromJSON(line)
@@ -129,12 +126,7 @@ AlgorithmHandler <- methods::setRefClass(
 )
 
 
-getAlgorithmHandler <-
-  function(applyfunc,
-           onLoadMethod = function() {
-             NULL
-           },
-           pipe = 'stdin') {
+getAlgorithmHandler <-function(applyfunc, onLoadMethod = function() {NULL}, pipe = 'stdin') {
     AlgorithmHandler$new(
       applyMethod = applyfunc,
       onLoadMethod = onLoadMethod,
