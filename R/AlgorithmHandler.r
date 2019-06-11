@@ -58,10 +58,11 @@ AlgorithmHandler <- methods::setRefClass(
           input$data
         }
       }
+      # Begin startup
       outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
       inputFile <- file(pipeName)
       open(inputFile)
-      result <- tryCatch({
+      loadResult <- tryCatch({
         stage <- "loading"
         state <- runLoad_(onLoadMethod)
         list(state = state)
@@ -76,8 +77,10 @@ AlgorithmHandler <- methods::setRefClass(
           error_type = "AlgorithmError"
         ))
       })
-      if (is.null(result$error)) {
-        state <- result$state
+      
+      #Finished loading, check if we failed and if not - start main algorithm loop
+      if (is.null(loadResult$error)) {
+        state <- loadResult$state
         while (length(line <-
                       readLines(inputFile, n = 1)) > 0) {
           stage <- "parsing"
@@ -108,9 +111,8 @@ AlgorithmHandler <- methods::setRefClass(
           flush.console()
           
           response = getResponseAsJsonString_(output)
-          print("before write")
           writeLines(response, con = outputFile)
-          print("after write")
+          # Finished writing response to algoout, checking stdin for more input.
         }
       } else{
         # Flush stdout before writing back response
@@ -118,6 +120,8 @@ AlgorithmHandler <- methods::setRefClass(
         response = getResponseAsJsonString_(result)
         writeLines(response, con = outputFile)
       }
+      # Either the stdin pipe was closed, or we recieved in error. In any case we should shut down now
+      # and close the pipes.
       close(inputFile)
       close(outputFile)
     }
