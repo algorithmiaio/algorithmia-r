@@ -58,6 +58,7 @@ AlgorithmHandler <- methods::setRefClass(
       # Begin startup
       inputFile <- file(pipeName)
       open(inputFile)
+      outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
       loadResult <- tryCatch({
         stage <- "loading"
         state <- runLoad_(onLoadMethod)
@@ -103,7 +104,6 @@ AlgorithmHandler <- methods::setRefClass(
           })
           
           # Flush stdout before writing back response
-          outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
           flush.console()
           response = getResponseAsJsonString_(output)
           writeLines(response, con = outputFile)
@@ -111,7 +111,6 @@ AlgorithmHandler <- methods::setRefClass(
         }
       } else{
         # Flush stdout before writing back response
-        outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
         flush.console()
         response = getResponseAsJsonString_(result)
         writeLines(response, con = outputFile)
