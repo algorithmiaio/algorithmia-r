@@ -56,9 +56,10 @@ AlgorithmHandler <- methods::setRefClass(
         }
       }
       # Begin startup
-      inputFile <- file(pipeName)
+      outputFile <- fifo("/tmp/algoout", blocking=TRUE)
+      inputFile <- file("stdin")
       open(inputFile)
-      outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
+      
       loadResult <- tryCatch({
         stage <- "loading"
         state <- runLoad_(onLoadMethod)
