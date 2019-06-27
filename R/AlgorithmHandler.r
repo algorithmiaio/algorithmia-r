@@ -56,9 +56,10 @@ AlgorithmHandler <- methods::setRefClass(
         }
       }
       # Begin startup
-      outputFile <- fifo("/tmp/algoout", open="w", blocking=TRUE)
+      outputFile <- fifo("/tmp/algoout", blocking=TRUE)
       inputFile <- file(pipeName)
       open(inputFile)
+      
       loadResult <- tryCatch({
         stage <- "loading"
         state <- runLoad_(onLoadMethod)
@@ -105,7 +106,6 @@ AlgorithmHandler <- methods::setRefClass(
           
           # Flush stdout before writing back response
           flush.console()
-          
           response = getResponseAsJsonString_(output)
           writeLines(response, con = outputFile)
           # Finished writing response to algoout, checking stdin for more input.
