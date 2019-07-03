@@ -34,5 +34,6 @@ Imports:
 BugReports: https://github.com/algorithmiaio/algorithmia-r/issues
 RoxygenNote: 5.0.1.9000
 Suggests: knitr,
-    rmarkdown
+    rmarkdown,
+    RUnit
 VignetteBuilder: knitr

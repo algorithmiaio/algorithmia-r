@@ -70,7 +70,8 @@ test.runWithIntegerInputOutput <-function() {
 test.runWithRawInputOutput <-function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
   algorithm <- client$algo("algo://quality/Python2xEcho")
-  checkEquals(algorithm$pipe(raw(10))$result, raw(10))
+  result <- algorithm$pipe(raw(10))$result
+  checkEquals(raw(result), raw(10))
 }
 
 test.runAsync <-function() {
@@ -85,5 +86,6 @@ test.runRaw <-function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
   algorithm <- client$algo("algo://quality/Python2xEcho")
   algorithm$setOptions(output="raw")
-  checkEquals(rawToChar(algorithm$pipe("hello")), "hello")
+  result <- algorithm$pipe("hello")$result
+  checkEquals(rawToChar(result), "hello")
 }

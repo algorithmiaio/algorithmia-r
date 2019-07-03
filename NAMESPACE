@@ -4,3 +4,4 @@ export(
     "AlgorithmiaAlgorithm", "AlgorithmiaClient", "AlgorithmiaDataFile",
     "AlgorithmiaDataDirectory", "AlgorithmiaDirectoryIterator")
 importFrom("methods", "new")
+importFrom("utils", "flush.console")
