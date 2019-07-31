@@ -124,6 +124,26 @@ AlgorithmHandler <- methods::setRefClass(
   )
 )
 
+#' Creates a new Algorithm Handler which registers the onLoad method (which loads the model or other
+#' dependencies for the algorithm) and the apply method which takes in the result of the onLoad method
+#' and the input from the user.
+#'
+#' @param applyfunc The method that we will call synchronously for each algorithm call. The first argument
+#' it will be called with is the user input, followed with the output of the onLoad function.
+#'
+#' @param onLoadMethod This optional method that is run once when the process first starts. It loads the
+#' data required and other shared state for each algorithm call.
+#'
+#' @param pipe The file which we will read line-by-line to get user input
+#'
+#' @return A new AlgorithmHandler object
+#'
+#' @examples
+#' loadPrefix <- function() { "Hello" }
+#' algorithm <- function(input, prefix) { paste(prefix, input) }
+#'
+#' #To create an algorithm that returns "Hello" + input:
+#' algo <- getAlgorithmHandler(algorithm, loadPrefix)
 getAlgorithmHandler <-function(applyfunc, onLoadMethod = function() {NULL}, pipe = 'stdin') {
     AlgorithmHandler$new(
       applyMethod = applyfunc,

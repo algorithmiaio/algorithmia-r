@@ -2,8 +2,8 @@
 % Please edit documentation in R/Algorithm.r
 \docType{class}
 \name{AlgorithmiaAlgorithm-class}
-\alias{AlgorithmiaAlgorithm}
 \alias{AlgorithmiaAlgorithm-class}
+\alias{AlgorithmiaAlgorithm}
 \title{Algorithm object which enables you to call Algorithmia algorithms.
 To create one, call: `client$algo("algoUrl")`}
 \description{
@@ -22,6 +22,7 @@ necessary to make API calls.}
 \item{\code{queryParameters}}{Mutable list of parameters to use while making
 algorithm calls. These can be changed by calling setOptions.}
 }}
+
 \section{Methods}{
 
 \describe{

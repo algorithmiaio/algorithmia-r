@@ -2,8 +2,8 @@
 % Please edit documentation in R/DataDirectory.r
 \docType{class}
 \name{AlgorithmiaDirectoryIterator-class}
-\alias{AlgorithmiaDirectoryIterator}
 \alias{AlgorithmiaDirectoryIterator-class}
+\alias{AlgorithmiaDirectoryIterator}
 \title{DirectoryIterator object to iterate over child files or directories of a parent directory.
 To create one, call: `dataDirectory$dirs()` or `dataDirectory$files()`}
 \description{
@@ -25,6 +25,7 @@ To create one, call: `dataDirectory$dirs()` or `dataDirectory$files()`
 
 \item{\code{directoryEntries}}{The list of children entries we are iterating over.}
 }}
+
 \section{Methods}{
 
 \describe{

@@ -2,8 +2,8 @@
 % Please edit documentation in R/DataDirectory.r
 \docType{class}
 \name{AlgorithmiaDataDirectory-class}
-\alias{AlgorithmiaDataDirectory}
 \alias{AlgorithmiaDataDirectory-class}
+\alias{AlgorithmiaDataDirectory}
 \title{DataDirectory object to interact with directories. Supports Algorithmia data
 directories, S3, Dropbox and more coming soon!
 To create one, call: `client$dir("directory_path")`}
@@ -22,6 +22,7 @@ necessary to make API calls.}
 
 \item{\code{dataDirectoryPath}}{The path of to the directory}
 }}
+
 \section{Methods}{
 
 \describe{

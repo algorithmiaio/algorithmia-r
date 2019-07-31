@@ -2,8 +2,8 @@
 % Please edit documentation in R/Client.r
 \docType{class}
 \name{AlgorithmiaClient-class}
-\alias{AlgorithmiaClient}
 \alias{AlgorithmiaClient-class}
+\alias{AlgorithmiaClient}
 \title{Client object which makes it easy to interact with the Algorithmia REST API.
 To create one, call `getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY")`}
 \description{
@@ -20,6 +20,7 @@ should NOT be set inside algorithms.}
 set this explicitly since the default will talk to the correct
 Algorithmia API server.}
 }}
+
 \section{Methods}{
 
 \describe{

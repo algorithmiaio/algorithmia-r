@@ -2,8 +2,8 @@
 % Please edit documentation in R/DataFile.r
 \docType{class}
 \name{AlgorithmiaDataFile-class}
-\alias{AlgorithmiaDataFile}
 \alias{AlgorithmiaDataFile-class}
+\alias{AlgorithmiaDataFile}
 \title{DataFile object to interact with files. Supports Algorithmia data
 files, S3, Dropbox and more coming soon!
 To create one, call: `client$file("file_path")`}
@@ -24,6 +24,7 @@ necessary to make API calls.}
 
 \item{\code{size}}{Size (in bytes) of the file. Only gets set when setAttributes is called.}
 }}
+
 \section{Methods}{
 
 \describe{

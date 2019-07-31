@@ -2,8 +2,8 @@
 % Please edit documentation in R/Acl.r
 \docType{class}
 \name{AlgorithmiaAcl-class}
-\alias{AlgorithmiaAcl}
 \alias{AlgorithmiaAcl-class}
+\alias{AlgorithmiaAcl}
 \title{Internal class used to describe ACLs.}
 \description{
 Internal class used to describe ACLs.
