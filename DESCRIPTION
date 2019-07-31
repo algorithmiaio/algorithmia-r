@@ -29,8 +29,7 @@ Collate:
 Imports:
     base64enc,
     httr,
-    rjson,
-    xml2
+    rjson
 BugReports: https://github.com/algorithmiaio/algorithmia-r/issues
 RoxygenNote: 5.0.1.9000
 Suggests: knitr,
