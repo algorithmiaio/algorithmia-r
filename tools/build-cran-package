@@ -1,0 +1,34 @@
+#!/bin/bash
+# This needs to be invocated via: tools/build-cran-package. We need to run this from the top level dir of the repo.
+# When this is done, read through the reports. There should now be a tar ball in the top level dir. If there are no error,
+# upload that file to CRAN.
+
+# You might need to sudo apt-get install texlive-fonts-extra texinfo
+
+set -e
+
+# Install dependencies for the build to succeed (this list may be incomplete). 
+# You might want to comment this out so future builds are faster
+#Rscript -e "install.packages('knitr') ; install.packages('roxygen2')"
+
+# Make the man pages
+Rscript -e "roxygen2::roxygenise()"
+
+# Let's remove the tests from the package for now
+tempDir=$(mktemp -d)
+mv tests $tempDir
+cp LICENSE $tempDir
+
+year=$(date +"%Y")
+printf "YEAR: $year\nCOPYRIGHT HOLDER: Algorithmia" > LICENSE
+R CMD build .
+mv $tempDir/tests .
+mv $tempDir/LICENSE .
+rmdir $tempDir
+
+# for checking the package
+# You might want to comment this out so future builds are faster
+#Rscript -e "install.packages('rmarkdown')"
+R CMD check algorithmia_*
+R CMD check --as-cran algorithmia_*
+

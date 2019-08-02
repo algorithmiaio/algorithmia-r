@@ -18,4 +18,3 @@ dataDirectory$create(ReadAcl.MY_ALGORITHMS)
 dataDirectory$updatePermissions(ReadAcl.MY_ALGORITHMS)
 }
 \keyword{datasets}
-
