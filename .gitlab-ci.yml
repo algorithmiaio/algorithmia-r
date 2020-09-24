@@ -1,0 +1,14 @@
+stages:
+  - compile
+
+variables:
+  PROJECT_NAME: algorithmia-r
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  RUNNING_ON_BUILD_SERVER: "true"
+
+compile:compile:
+  stage: compile
+  image: alpine
+  script:
+  - echo "dummy compile"
