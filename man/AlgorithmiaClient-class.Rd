@@ -36,5 +36,7 @@ AlgorithmiaDataDirectory objects are used to interact with directories.}
 \item{\code{file(dataUrl)}}{Takes a path to a file and returns a AlgorithmiaDataFile object.
 Data paths are described in detail at: http://docs.algorithmia.com/?java#data-api-specification.
 AlgorithmiaDataFile objects are used to read and write files.}
+
+\item{\code{reportInsights(insights)}}{Takes a list of Algorithmia Insights and reports them for this algorithm execution.}
 }}
 

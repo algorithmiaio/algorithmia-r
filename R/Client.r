@@ -40,6 +40,14 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
        AlgorithmiaDataDirectory objects are used to interact with directories."
       getDataDirectory(.self, dataUrl)
     },
+    reportInsights = function(insights) {
+      "Takes a list of Algorithmia Insights and reports them for this algorithm execution."
+      insights_names <- names(insights)
+      payload <- lapply(seq_along(insights), function(nameindex) {
+        list(insight_key = insights_names[[nameindex]], insight_value = insights[[insights_names[[nameindex]]]])
+      })
+      response <- client$postJsonHelper("/v1/insights", payload)
+    },
     getBasicHeaders = function() {
       headers <- c()
 

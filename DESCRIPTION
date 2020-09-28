@@ -1,9 +1,9 @@
 Package: algorithmia
 Type: Package
 Title: Allows you to Easily Interact with the Algorithmia Platform
-Version: 0.2.0
-Date: 2019-07-31
-Author: James Sutton, James Athappilly
+Version: 0.3.0
+Date: 2020-09-28
+Author: James Sutton, James Athappilly, Taylor Raack
 Maintainer: James Athappilly <jamesa@algorithmia.com>
 Description: The company, Algorithmia, houses the largest marketplace of online
     algorithms. This package essentially holds a bunch of REST wrappers that
