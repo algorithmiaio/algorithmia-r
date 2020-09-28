@@ -4,7 +4,7 @@ Title: Allows you to Easily Interact with the Algorithmia Platform
 Version: 0.3.0
 Date: 2020-09-28
 Author: James Sutton, James Athappilly, Taylor Raack
-Maintainer: James Athappilly <jamesa@algorithmia.com>
+Maintainer: Robert Fulton <rfulton@algorithmia.com>
 Description: The company, Algorithmia, houses the largest marketplace of online
     algorithms. This package essentially holds a bunch of REST wrappers that
     make it very easy to call algorithms in the Algorithmia platform and access
