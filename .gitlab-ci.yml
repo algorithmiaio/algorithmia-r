@@ -1,5 +1,5 @@
 stages:
-  - compile
+  - test
 
 variables:
   PROJECT_NAME: algorithmia-r
@@ -7,8 +7,19 @@ variables:
   DOCKER_DRIVER: overlay2
   RUNNING_ON_BUILD_SERVER: "true"
 
-compile:compile:
-  stage: compile
+test:tests:
+  stage: test
   image: alpine
   script:
-  - echo "dummy compile"
+  - if [ -z "$ALGORITHMIA_API_KEY" ]; then echo "Algorithmia API key not defined"; exit 1; fi
+  - apk add R R-dev R-doc bash build-base linux-headers libxml2-dev texinfo texlive texmf-dist-fontsextra
+  - Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('remotes') ; remotes::install_deps(dependencies = TRUE)"
+  - R CMD build .
+  - R CMD check *tar.gz
+
+test:check_as_cran:
+  stage: test
+  image: alpine
+  script:
+  - apk add R R-dev R-doc bash build-base linux-headers libxml2-dev texinfo texlive texmf-dist-fontsextra git
+  - sh tools/test-cran-package

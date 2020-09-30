@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e
+
+function finish {
+  echo "cleaning up..."
+
+  mv $tempDir/LICENSE .
+  rmdir $tempDir
+
+  # make sure no files changed
+  git status
+}
+
+# if anything goes wrong, make sure to run finish() to clean up
+trap finish EXIT
+
+# do not run tests to build package or test package in Rhub
+echo "^tests$" >> .Rbuildignore
+
+# Install RHub package for testing builds
+Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('rjson') ; install.packages('base64enc') ; install.packages('rhub')"
+
+# Make the man pages
+Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('roxygen2') ; roxygen2::roxygenise()"
+
+# Let's remove the tests from the package for now
+tempDir=$(mktemp -d)
+cp LICENSE $tempDir
+
+# Temporarily switch to expected CRAN license format (different from standard open-source license format)
+year=$(date +"%Y")
+printf "YEAR: $year\nCOPYRIGHT HOLDER: Algorithmia" > LICENSE
+
+# check that submission is ready for CRAN
+mkdir -p ~/.local/share/rhub
+echo '"rfulton@algorithmia.com","d770f2b180504d23a55a8d89e43c9f97"' >> ~/.local/share/rhub/validated_emails.csv
+Rscript tools/check-rhub.r "cran"
