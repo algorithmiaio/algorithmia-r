@@ -7,7 +7,9 @@
 Sample usage:
 dataDirectory$create(ReadAcl.PUBLIC)
 dataDirectory$updatePermissions(ReadAcl.PUBLIC)}
-\format{An object of class \code{AlgorithmiaAcl} of length 1.}
+\format{
+An object of class \code{AlgorithmiaAcl} of length 1.
+}
 \usage{
 ReadAcl.PUBLIC
 }

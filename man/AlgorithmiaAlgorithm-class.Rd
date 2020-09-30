@@ -28,8 +28,12 @@ algorithm calls. These can be changed by calling setOptions.}
 \describe{
 \item{\code{pipe(input)}}{Calls an algorithm with the input provided.}
 
-\item{\code{setOptions(timeout = 300, stdout = FALSE, output = "default",
-  parameters = list())}}{Allows you to set the timeout duration (in seconds), whether you want the stdout
+\item{\code{setOptions(
+  timeout = 300,
+  stdout = FALSE,
+  output = "default",
+  parameters = list()
+)}}{Allows you to set the timeout duration (in seconds), whether you want the stdout
 that was produced while running the algorithm (this only works when the algorithm
 author call it), and whether this should run as async (output = 'void') or in
 raw mode (output = 'raw').}

@@ -6,8 +6,11 @@
 dependencies for the algorithm) and the apply method which takes in the result of the onLoad method
 and the input from the user.}
 \usage{
-getAlgorithmHandler(applyfunc, onLoadMethod = function() {     NULL },
-  pipe = "stdin")
+getAlgorithmHandler(
+  applyfunc,
+  onLoadMethod = function() {     NULL },
+  pipe = "stdin"
+)
 }
 \arguments{
 \item{applyfunc}{The method that we will call synchronously for each algorithm call. The first argument
