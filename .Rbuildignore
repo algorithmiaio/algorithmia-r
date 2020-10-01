@@ -1,2 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.gitlab-ci\.yml$
+^CODEOWNERS$
+^.*tar\.gz.*$

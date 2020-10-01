@@ -3,8 +3,7 @@ chooseCRANmirror(graphics=FALSE, ind=1)
 message("Running rhubcheck...")
 
 cr <- rhub::check_for_cran(
-  show_status = TRUE,
-  env_vars = c(`ALGORITHMIA_API_KEY` = "1234")
+  show_status = TRUE
 )
 
 statuses <- cr[[".__enclos_env__"]][["private"]][["status_"]]
