@@ -52,4 +52,4 @@ f$putJson(myObject) # Encodes the object as json and writes that to the file, ov
 
 ## More Documentation
 
-To learn more about the Algorithmia platform and all the latest developer news, visit http://developers.algorithmia.com.
+To learn more about the Algorithmia platform and all the latest developer news, visit https://algorithmia.com/developers.

@@ -11,7 +11,7 @@ Description: The company, Algorithmia, houses the largest marketplace of online
     files and directories in the Algorithmia data API. To learn more about the
     services they offer and the algorithms in the platform visit
     <http://algorithmia.com>. More information for developers can be found at
-    <http://developers.algorithmia.com>.
+    <https://algorithmia.com/developers>.
 Depends:
     R (>= 3.3.1),
     methods (>= 2.5.0)
