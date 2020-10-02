@@ -124,7 +124,7 @@ test.arityProblemWithContextThrowsException <- function() {
   checkEquals(result, expected)
 }
 
-test.loaderThrowsException <- function() {
+disabledtest.loaderThrowsException <- function() {
   expected <-
     list(
       error = list(
