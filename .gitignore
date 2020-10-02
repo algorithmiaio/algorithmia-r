@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 inst/doc
+/..Rcheck/
+/algorithmia.Rcheck/
+*.tar.gz*
+.project
