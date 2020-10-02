@@ -46,6 +46,10 @@ test.deleteNonExistantFile <-function() {
 
 test.fileCreationAndDeletion <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataDir <- client$dir("data://.my/largeFiles")
+  if(!dataDir$exists()) {
+    dataDir$create()
+  }
   dataFile <- client$file("data://.my/largeFiles/R.file")
 
   checkTrue(!dataFile$exists())
@@ -61,6 +65,10 @@ test.fileCreationAndDeletion <- function() {
 
 test.filePutJsonAndGetJson <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataDir <- client$dir("data://.my/largeFiles")
+  if(!dataDir$exists()) {
+    dataDir$create()
+  }
   dataFile <- client$file("data://.my/largeFiles/RjsonFile")
   input <- list(a=1, b=2)
   checkEquals(dataFile$putJson(input), dataFile)
@@ -75,6 +83,10 @@ test.filePutJsonAndGetJson <- function() {
 
 test.getString <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataDir <- client$dir("data://.my/largeFiles")
+  if(!dataDir$exists()) {
+    dataDir$create()
+  }
   dataFile <- client$file("data://.my/largeFiles/RstringFile")
 
   input <- "what"
@@ -84,6 +96,10 @@ test.getString <- function() {
 
 test.getRaw <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  dataDir <- client$dir("data://.my/largeFiles")
+  if(!dataDir$exists()) {
+    dataDir$create()
+  }
   dataFile <- client$file("data://.my/largeFiles/RstringFile")
 
   input <- raw(10)
@@ -105,6 +121,10 @@ test.makeAndGetFile <- function() {
   close(f)
 
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
+  directory <- client$dir("data://.my/largeFiles")
+  if(!directory$exists()) {
+    directory$create()
+  }
   dataFile <- client$file("data://.my/largeFiles/R1000000Numbers")
   checkEquals(dataFile$putFile(filePath), dataFile)
 
