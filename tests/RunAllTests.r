@@ -16,5 +16,21 @@ suite <- defineTestSuite(name=paste(pkgname, "RUnit Tests"),
 # Run tests
 result <- runTestSuite(suite)
 
-# Display result tests on the console
-printTextProtocol(result)
+# Fail build if any errors or failures were encountered
+if (result[[1]]$nErr > 0 || result[[1]]$nFail > 0) {
+  testFileNames <- names(result[[1]]$sourceFileResults)
+  for (testFileName in testFileNames) {
+    testFileResult <- result[[1]]$sourceFileResults[[testFileName]]
+    testNames <- names(testFileResult)
+    for (testName in testNames) {
+      result <- testFileResult[[testName]]
+	  if (!is.null(result$msg)) {
+	    message(paste(testFileName, testName, result$msg))
+	    if (!is.null(result$traceBack)) {
+	      message(result$traceBack)
+	    }
+	  }
+	}
+  }
+  stop("Errors were found")
+}
