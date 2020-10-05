@@ -15,7 +15,7 @@ test:tests:
   - apk add R R-dev R-doc bash build-base linux-headers libxml2-dev texinfo texlive texmf-dist-fontsextra
   - Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('remotes') ; remotes::install_deps(dependencies = TRUE)"
   - R CMD build .
-  - R CMD check *tar.gz
+  - R CMD check *tar.gz || cat /builds/algorithmia-eng/algorithmia-r/algorithmia.Rcheck/tests/RunAllTests.Rout.fail
 
 test:check_as_cran:
   stage: test
