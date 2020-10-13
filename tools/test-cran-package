@@ -24,11 +24,9 @@ Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('rjson') 
 # Make the man pages
 Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('roxygen2') ; roxygen2::roxygenise()"
 
-# Let's remove the tests from the package for now
+# Update the license file to CRAN license format (different from standard open-source license format)
 tempDir=$(mktemp -d)
 cp LICENSE $tempDir
-
-# Temporarily switch to expected CRAN license format (different from standard open-source license format)
 year=$(date +"%Y")
 printf "YEAR: $year\nCOPYRIGHT HOLDER: Algorithmia" > LICENSE
 
