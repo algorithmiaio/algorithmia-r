@@ -34,3 +34,6 @@ printf "YEAR: $year\nCOPYRIGHT HOLDER: Algorithmia" > LICENSE
 mkdir -p ~/.local/share/rhub
 echo '"rfulton@algorithmia.com","d770f2b180504d23a55a8d89e43c9f97"' >> ~/.local/share/rhub/validated_emails.csv
 Rscript tools/check-rhub.r "cran"
+
+# if everything works ok, build the package locally
+R CMD build .
