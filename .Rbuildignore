@@ -3,3 +3,4 @@
 ^\.gitlab-ci\.yml$
 ^CODEOWNERS$
 ^.*tar\.gz.*$
+^README.*
