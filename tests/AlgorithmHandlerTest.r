@@ -25,7 +25,7 @@ afterTest <- function() {
 readPipe <- function(fifoPipe) {
   result <- readLines(fifoPipe)
   close(fifoPipe)
-  print(result)
+  print(result) 
   rjson::fromJSON(result)
 }
 
@@ -135,7 +135,7 @@ test.arityProblemWithContextThrowsException <- function() {
   checkEquals(result, expected)
 }
 
-disabledtest.loaderThrowsException <- function() {
+test.loaderThrowsException <- function() {
   expected <-
     list(
       error = list(

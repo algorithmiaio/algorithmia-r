@@ -79,7 +79,7 @@ AlgorithmHandler <- methods::setRefClass(
           error_type = "AlgorithmError"
         ))
       })
-      
+
       #Finished loading, check if we failed and if not - start main algorithm loop
       if (is.null(loadResult$error)) {
         state <- loadResult$state
@@ -119,6 +119,7 @@ AlgorithmHandler <- methods::setRefClass(
       } else{
         # Flush stdout before writing back response
         flush.console()
+        result <- (loadResult)
         response = getResponseAsJsonString_(result)
         writeLines(response, con = outputFile)
       }
