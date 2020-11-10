@@ -56,9 +56,13 @@ AlgorithmHandler <- methods::setRefClass(
         }
       }
       # Begin startup
-      outputFile <- fifo("/tmp/algoout", blocking=TRUE)
+      if(.Platform$OS.type != "windows"){
+        outputFile <- fifo("/tmp/algoout", blocking=TRUE)
+      } else {
+        outputFile <- file("algoout")
+      }
       inputFile <- file(pipeName)
-      open(inputFile)
+      open(inputFile,"r")
       
       loadResult <- tryCatch({
         stage <- "loading"
@@ -75,10 +79,11 @@ AlgorithmHandler <- methods::setRefClass(
           error_type = "AlgorithmError"
         ))
       })
-      
+
       #Finished loading, check if we failed and if not - start main algorithm loop
       if (is.null(loadResult$error)) {
         state <- loadResult$state
+        response <- ""
         while (length(line <- readLines(inputFile, n = 1)) > 0) {
           stage <- "parsing"
           output <- tryCatch({
@@ -107,12 +112,14 @@ AlgorithmHandler <- methods::setRefClass(
           # Flush stdout before writing back response
           flush.console()
           response = getResponseAsJsonString_(output)
-          writeLines(response, con = outputFile)
+          
           # Finished writing response to algoout, checking stdin for more input.
         }
+          writeLines(response, con = outputFile)
       } else{
         # Flush stdout before writing back response
         flush.console()
+        result <- (loadResult)
         response = getResponseAsJsonString_(result)
         writeLines(response, con = outputFile)
       }

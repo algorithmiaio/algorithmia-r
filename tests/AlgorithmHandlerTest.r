@@ -3,18 +3,29 @@ library("tools")
 library("rjson")
 
 beforeTest <- function() {
-  system('mkfifo /tmp/algoout')
-  fifo('/tmp/algoout', 'r')
+  if(.Platform$OS.type != "windows"){
+    system('mkfifo /tmp/algoout')
+    fifo('/tmp/algoout', 'r')
+  } else {
+    code <- shell('type nul > algoout')
+    if(code == "0"){
+      file('algoout')
+    }
+  }
 }
 
 afterTest <- function() {
-  system('rm /tmp/algoout')
+  if(.Platform$OS.type != "windows"){
+    system('rm /tmp/algoout')
+  }else{
+    code <- shell('del /f algoout')
+  }
 }
 
 readPipe <- function(fifoPipe) {
   result <- readLines(fifoPipe)
   close(fifoPipe)
-  print(result)
+  print(result) 
   rjson::fromJSON(result)
 }
 
@@ -22,40 +33,40 @@ test.runHelloWorld <- function() {
   expected <-
     list(result = "hello james",
          metadata = list(content_type = "text"))
-  con <- "input/hello_world.json"
+  con <- "tests/input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
   }
   out <- beforeTest()
-  handler <- getAlgorithmHandler(algorithm, pipe = con)
+  handler <- getAlgorithmHandler(algorithm, pipe = normalizePath(con))
   handler$serve()
   result <- readPipe(out)
   afterTest()
   checkEquals(result, expected)
 }
-
-test.runHelloWithJson <- function() {
-  expected <-
-    list(result = "hello james",
-         metadata = list(content_type = "text"))
-  con = "input/hello_json.json"
-  algorithm <- function(input) {
-    paste("hello", input$name)
-  }
-  out <- beforeTest()
-  handler <- getAlgorithmHandler(algorithm, pipe = con)
-  handler$serve()
-  result <- readPipe(out)
-  afterTest()
-  checkEquals(result, expected)
-}
-
+ 
+ test.runHelloWithJson <- function() {
+   expected <-
+     list(result = "hello james",
+          metadata = list(content_type = "text"))
+   con = "tests/input/hello_json.json"
+   algorithm <- function(input) {
+     paste("hello", input$name)
+   }
+   out <- beforeTest()
+   handler <- getAlgorithmHandler(algorithm, pipe = con)
+   handler$serve()
+   result <- readPipe(out)
+   afterTest()
+   checkEquals(result, expected)
+ }
+ 
 
 test.runWithContext <- function() {
   expected <-
     list(result = "hello james here is your file /tmp/example",
          metadata = list(content_type = "text"))
-  con = "input/hello_world.json"
+  con = "tests/input/hello_world.json"
   algorithm <- function(input, context) {
     if (is.null(context)) {
       stop("Context was not defined")
@@ -87,7 +98,7 @@ test.algorithmThrowsException <- function() {
         error_type = "AlgorithmError"
       )
     )
-  con = "input/hello_world.json"
+  con = "tests/input/hello_world.json"
   algorithm <- function(input) {
     stop("a runtime exception was thrown")
   }
@@ -109,7 +120,7 @@ test.arityProblemWithContextThrowsException <- function() {
         error_type = "AlgorithmError"
       )
     )
-  con = "input/hello_world.json"
+  con = "tests/input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
   }
@@ -124,7 +135,7 @@ test.arityProblemWithContextThrowsException <- function() {
   checkEquals(result, expected)
 }
 
-disabledtest.loaderThrowsException <- function() {
+test.loaderThrowsException <- function() {
   expected <-
     list(
       error = list(
@@ -134,7 +145,7 @@ disabledtest.loaderThrowsException <- function() {
       )
     )
   
-  con = "input/hello_world.json"
+  con = "tests/input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
   }
