@@ -48,6 +48,48 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       })
       response <- client$postJsonHelper("/v1/insights", payload)
     },
+    getAlgorithmObject = function(algoUrl) {
+      "Returns an algorithm object"
+      url = paste0("/v1/algorithms/",algoUrl)
+      response <- httr::content(getHelper(url),"parsed")
+
+    },
+    createAlgorithm = function(username,data) {
+      "Creates and returns an algorithm object"
+      url = paste0("/v1/algorithms/",username)
+      response <- httr::content(postHelper(url,data))
+    },
+    compileAlgorithm = function(algoUrl){
+      "returns algorithm object"
+      url = paste0("/v1/algorithms/",algoUrl,"/compile")
+      response <- httr::content(postJsonHelper(url,{}),"parsed")
+    },
+    updateAlgorithm = function(algoUrl, data){
+      "returns updated algorithm object. @data must be a list of members"
+      url = paste0("/v1/algorithms/",algoUrl)
+      response <- httr::content(putHelper(url,data),"parsed")
+    },
+    publishAlgorithm = function(algoUrl, data){
+      "publish most recent version of algorithm returns algorithm object"
+      url = url = paste0("/v1/algorithms/",algoUrl,"/versions")
+      response <- httr::content(postHelper(url,data))
+    },
+    deleteAlgorithm = function(algoUrl){
+      url = paste0("/v1/algorithms/",algoUrl)
+      response <- deleteHelper(url)
+    },
+    listAlgoVersions = function(algoUrl){
+      url = paste0("/v1/algorithms/",algoUrl,"/versions")
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    listAlgoBuilds = function(algoUrl) {
+      url = paste0("/v1/algorithms/",algoUrl,"/builds")
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    getAlgoBuildLogs = function(algoUrl, buildId){
+      url = paste0("/v1/algorithms/",algoUrl,"/builds/",buildId,"/logs")
+      response <- httr::content(getHelper(url),"parsed")
+    },
     getBasicHeaders = function() {
       headers <- c()
 
@@ -71,10 +113,15 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
                   httr::write_disk(targetFile))
       }
     },
+    postHelper = function(algoUrl, input, queryParameters=c()){
+      "Simpler post helper that doesnt change formatting"
+      headers <- getBasicHeaders()
+      headers["Content-Type"] <- 'application/json'
+      response <- httr::POST(url=URLencode(paste0(apiAddress, algoUrl)), query={}, config=httr::add_headers(headers), body=input)
+    },
     postJsonHelper = function(algoUrl, input, queryParameters=c()) {
       inputJson <- NULL
       headers <- getBasicHeaders()
-
       if (is.list(input) && length(input) == 0) {
         inputJson <- "[]"
         headers["Content-Type"] <- 'application/json'
@@ -88,7 +135,6 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
         inputJson <- rjson::toJSON(input)
         headers["Content-Type"] <- 'application/json'
       }
-
       httr::POST(url=URLencode(paste0(apiAddress, algoUrl)), query=queryParameters, config=httr::add_headers(headers), body=inputJson)
     },
     headHelper = function(url) {
@@ -98,8 +144,7 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
     },
     putHelper = function(url, data) {
       headers <- getBasicHeaders()
-
-      httr::PUT(url=URLencode(paste0(apiAddress, url)), config=httr::add_headers(headers), body=data)
+      httr::PUT(url=URLencode(paste0(apiAddress, url)), config=httr::add_headers(headers), body=data, httr::content_type_json())
     },
     deleteHelper = function(url) {
       headers <- getBasicHeaders()
