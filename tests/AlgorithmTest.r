@@ -23,12 +23,20 @@ test.createAlgorithm <- function(){
       }
     }'
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
-  checkEquals(client$createAlgorithm("J_bragg",payload)$resource_type,"algorithm")
+  response <- client$createAlgorithm("J_bragg",payload)
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(response$resource_type,"algorithm")
 }
 
 test.deleteAlgorithm <- function(){
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
-  checkEquals(httr::status_code(client$deleteAlgorithm("J_bragg/my_first_algorithm1")),204)
+  response <- client$deleteAlgorithm("J_bragg/my_first_algorithm1")
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(httr::status_code(response),204)
 }
 
 test.publishAlgorithm <- function() {
@@ -44,7 +52,11 @@ test.publishAlgorithm <- function() {
   }' 
 
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
-  checkEquals(client$publishAlgorithm("J_bragg/Echo",payload)$resource_type,"algorithm")
+  response <- client$publishAlgorithm("J_bragg/Echo",payload)
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(response$resource_type,"algorithm")
 }
 
 test.updateAlgorithm <- function(){
@@ -62,12 +74,20 @@ test.updateAlgorithm <- function(){
     }
   }'
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
-  checkEquals(client$updateAlgorithm("J_bragg/my_first_algorithm",payload)$resource_type,"algorithm")
+  response <- client$updateAlgorithm("J_bragg/my_first_algorithm",payload)
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(response$resource_type,"algorithm")
 }
 
 test.compileAlgorithm <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
-  checkTrue(!is.null(client$compileAlgorithm("J_bragg/Echo")$id),TRUE)
+  response <- client$compileAlgorithm("J_bragg/Echo")
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkTrue(!is.null(response$id),TRUE)
 }
 
 test.listAlgoVersions = function() {
