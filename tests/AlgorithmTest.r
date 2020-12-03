@@ -1,6 +1,110 @@
 library("RUnit")
 library("tools")
 
+test.getAlgorithm <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkEquals(client$getAlgorithmObject("J_bragg/Echo")$resource_type,"algorithm")
+}
+
+test.createAlgorithm <- function(){
+  payload <- '{
+    "details": 
+    {
+      "label": "My First Algorithm1"
+    },
+    "name": "my_first_algorithm1",
+    "settings": {
+      "environment": "cpu",
+      "language": "python3-1",
+      "license": "apl",
+      "network_access": "full",
+      "pipeline_enabled": true,
+      "source_visibility": "closed" 
+      }
+    }'
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  response <- client$createAlgorithm("J_bragg",payload)
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(response$resource_type,"algorithm")
+}
+
+test.deleteAlgorithm <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  response <- client$deleteAlgorithm("J_bragg/my_first_algorithm1")
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(httr::status_code(response),204)
+}
+
+test.publishAlgorithm <- function() {
+  payload <- '{
+    "settings": {
+      "algorithm_callability": "private"
+    },
+    "version_info": {
+      "version_type": "minor",
+      "release_notes": "A few bug fixes.",
+      "sample_input": "42"
+    }
+  }' 
+
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  response <- client$publishAlgorithm("J_bragg/Echo",payload)
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(response$resource_type,"algorithm")
+}
+
+test.updateAlgorithm <- function(){
+
+  payload <- '{
+    "details": {
+      "label": "My Updated Algorithm"
+    },
+    "settings": {
+      "environment": "gpu",
+      "license": "apl",
+      "network_access": "full",
+      "pipeline_enabled": true,
+      "source_visibility": "closed"
+    }
+  }'
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  response <- client$updateAlgorithm("J_bragg/my_first_algorithm",payload)
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkEquals(response$resource_type,"algorithm")
+}
+
+test.compileAlgorithm <- function() {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  response <- client$compileAlgorithm("J_bragg/Echo")
+  if(!is.null(response$error)){
+    print(response$error)
+  }
+  checkTrue(!is.null(response$id),TRUE)
+}
+
+test.listAlgoVersions = function() {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(length(client$listAlgoBuilds("J_bragg/Echo")$results)>0,TRUE)
+}
+
+test.listAlgoBuilds <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(length(client$listAlgoBuilds("J_bragg/Echo")$results)>0,TRUE)
+}
+
+test.getAlgoBuildLogs <- function() {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(length(client$getAlgoBuildLogs("J_bragg/Echo","1a392e2c-b09f-4bae-a616-56c0830ac8e5")$logs)>0,TRUE)
+}
+
 test.getAlgorithmPathErrors <- function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY", unset=NA))
   checkException(client$algo(1))
