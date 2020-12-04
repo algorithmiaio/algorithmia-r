@@ -90,6 +90,30 @@ test.compileAlgorithm <- function() {
   checkTrue(!is.null(response$id),TRUE)
 }
 
+test.getSCMStatus <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(!is.null(client$getAlgoSCMStatus("J_bragg/Echo")$scm_connection_status),TRUE)
+}
+
+test.listSCMs <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(length(client$listSCMs()$results)>0,TRUE)
+}
+
+test.getSCM <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(!is.null(client$getSCM("internal")$id),TRUE)
+}
+
+test.getSCMAuthStatus <- function() {
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  print(client$getSCMAuthStatus("internal"))
+}
+
+test.revokeSCMAuth <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+}
+
 test.listAlgoVersions = function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
   checkTrue(length(client$listAlgoBuilds("J_bragg/Echo")$results)>0,TRUE)
@@ -98,6 +122,11 @@ test.listAlgoVersions = function() {
 test.listAlgoBuilds <- function(){
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
   checkTrue(length(client$listAlgoBuilds("J_bragg/Echo")$results)>0,TRUE)
+}
+
+test.getAlgoBuild <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
+  checkTrue(!is.null(client$getAlgoBuild("J_bragg/Echo","1a392e2c-b09f-4bae-a616-56c0830ac8e5")$build_id),TRUE)
 }
 
 test.getAlgoBuildLogs <- function() {

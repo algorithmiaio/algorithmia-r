@@ -52,7 +52,6 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       "Returns an algorithm object"
       url = paste0("/v1/algorithms/",algoUrl)
       response <- httr::content(getHelper(url),"parsed")
-
     },
     createAlgorithm = function(username,data) {
       "Creates and returns an algorithm object"
@@ -86,10 +85,35 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       url = paste0("/v1/algorithms/",algoUrl,"/builds")
       response <- httr::content(getHelper(url),"parsed")
     },
+    getAlgoBuild = function(algoUrl,buildId){
+      url = paste0("/v1/algorithms/",algoUrl,"/builds/",buildId)
+      response <- httr::content(getHelper(url),"parsed")
+    },
     getAlgoBuildLogs = function(algoUrl, buildId){
       url = paste0("/v1/algorithms/",algoUrl,"/builds/",buildId,"/logs")
       response <- httr::content(getHelper(url),"parsed")
     },
+    getAlgoSCMStatus = function(algoUrl){
+      url = paste0("/v1/algorithms/",algoUrl,"/scm/status")
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    ## SCMs
+    listSCMs = function(){
+      response <- httr::content(getHelper("/v1/scms"),"parsed")
+    },
+    getSCM = function(scmId){
+      url = paste0("/v1/scms/",scmId)
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    getSCMAuthStatus = function(scmId){
+      url = paste0("/v1/scms/",scmId,"/oauth/status")
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    revokeSCMAuth = function(scmId){
+      url = paste0("/v1/scms/",scmId,"/oauth/revoke")
+      response <- httr::content(postJsonHelper(url,{}))
+    }
+    ## Helper functions
     getBasicHeaders = function() {
       headers <- c()
 
