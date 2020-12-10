@@ -111,8 +111,8 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
     },
     revokeSCMAuth = function(scmId){
       url = paste0("/v1/scms/",scmId,"/oauth/revoke")
-      response <- httr::content(postJsonHelper(url,{}))
-    }
+      response <- postJsonHelper(url,{})
+    },
     ## Helper functions
     getBasicHeaders = function() {
       headers <- c()
@@ -138,7 +138,7 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       }
     },
     postHelper = function(algoUrl, input, queryParameters=c()){
-      "Simpler post helper that doesnt change formatting"
+      "post helper that doesnt change formatting"
       headers <- getBasicHeaders()
       headers["Content-Type"] <- 'application/json'
       response <- httr::POST(url=URLencode(paste0(apiAddress, algoUrl)), query={}, config=httr::add_headers(headers), body=input)
