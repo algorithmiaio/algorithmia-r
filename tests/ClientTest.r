@@ -52,3 +52,15 @@ test.getAlgorithmiaDataDirectory <- function() {
   checkTrue(inherits(dataDirectory, "AlgorithmiaDataDirectory"))
   checkEquals(dataDirectory$client, client)
 }
+
+test.useCustomCACert <- function(){
+  testfile <- "testpem.pem"
+  file.create(testfile)
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA),customCert=testfile)
+  algorithm <- client$algo("algo://demo/hello")
+  checkEquals(algorithm$pipe(NULL)$result, "Hello null")
+  checkEquals(algorithm$pipe(1)$result, "Hello 1")
+  if (file.exists(testfile)) {
+  file.remove(testfile)
+}
+}
