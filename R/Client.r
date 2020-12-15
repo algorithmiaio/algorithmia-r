@@ -10,6 +10,42 @@ getAlgorithmiaApiAddress <- function(apiAddress=NA_character_) {
   }
 }
 
+getCert <- function(customCert=NA_character_){
+  
+  certfile <- file.path(path.package(package=pkgname), "R/crt/cacert.pem")
+  rcert <- file.info(certfile, extra_cols = FALSE)
+  #check to see if root cert has been modified in the last 24 weeks or ~5.5 months 
+  if(!is.na(rcert[difftime(Sys.time(), rcert[,"mtime"], units = "weeks") > 24,1:4][1,1])){
+    GET("https://raw.githubusercontent.com/bagder/ca-bundle/e9175fec5d0c4d42de24ed6d84a06d504d5e5a09/ca-bundle.crt",write_disk(certfile, overwrite = TRUE))
+  } 
+  
+  newCustomCert <- ""
+
+  if(!is.na(customCert)){
+    newCustomCert <- catCert(customCert,certfile)
+  } else if (!is.na(Sys.getenv("REQUESTS_CA_BUNDLE", unset=NA))) {
+    cert = Sys.getenv("REQUESTS_CA_BUNDLE", unset=NA)
+    newCustomCert <- catCert(cert,certfile)
+  } else if (!is.na(Sys.getenv("CURL_CA_BUNDLE", unset=NA))) {
+    cert = Sys.getenv("CURL_CA_BUNDLE", unset=NA)
+    newCustomCert <- catCert(cert,certfile)
+  }  else {
+    newCustomCert <- certfile
+  }
+  httr::set_config(httr::config(cainfo=newCustomCert))
+  newCustomCert
+}
+catCert <- function(customCert,rootCert){
+  tempfile = tempfile("cert",fileext = ".pem")
+  data = readr::read_lines(customCert)
+  write(data,tempfile,append=TRUE)
+  data2 = readr::read_lines(rootCert)
+  write(data2,tempfile,append=TRUE) 
+  tempfile
+}
+
+
+
 #' Client object which makes it easy to interact with the Algorithmia REST API.
 #' To create one, call `getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY")`
 #'
@@ -18,8 +54,9 @@ getAlgorithmiaApiAddress <- function(apiAddress=NA_character_) {
 #' @field apiAddress The Algorithmia API address. In most cases you don't need to
 #'        set this explicitly since the default will talk to the correct
 #'        Algorithmia API server.
+#' @field customCert is the custom CA certficate. This can be set from environment variables or explicitly declared
 AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
-  fields = list(apiKey = "character", apiAddress = "character"),
+  fields = list(apiKey = "character", apiAddress = "character", customCert = "character"),
   methods = list(
     algo = function(algoRef) {
       "Takes an algorithm reference  and returns an AlgorithmiaAlgorithm object.
@@ -52,7 +89,6 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       "Returns an algorithm object"
       url = paste0("/v1/algorithms/",algoUrl)
       response <- httr::content(getHelper(url),"parsed")
-
     },
     createAlgorithm = function(username,data) {
       "Creates and returns an algorithm object"
@@ -170,12 +206,14 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
 #' @param apiAddress The Algorithmia API address. Normal users should not set
 #' this. This defaults to "https://api.algorithmia.com" when it is not
 #' explicitly set.
+#' 
+#' @param customCert (optional) Custom CA Certificate
 #'
 #' @return A new AlgorithmiaClient object
 #'
 #' @examples
 #' client <- algorithmia::getAlgorithmiaClient() # Inside an Algorithmia algorithm
 #' client <- algorithmia::getAlgorithmiaClient("YOUR_ALGORITHMIA_API_KEY") # Everywhere else
-getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_) {
-  AlgorithmiaClient$new(apiKey=apiKey, apiAddress=getAlgorithmiaApiAddress(apiAddress))
+getAlgorithmiaClient <- function(apiKey=NA_character_, apiAddress=NA_character_,customCert=NA_character_) {
+  AlgorithmiaClient$new(apiKey=apiKey, apiAddress=getAlgorithmiaApiAddress(apiAddress),customCert=getCert(customCert))
 }
