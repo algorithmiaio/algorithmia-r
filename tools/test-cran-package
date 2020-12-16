@@ -19,7 +19,7 @@ trap finish EXIT
 echo "^tests$" >> .Rbuildignore
 
 # Install RHub package for testing builds
-Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('rjson') ; install.packages('base64enc') ; install.packages('rhub')"
+Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('rjson') ; install.packages('base64enc') ; install.packages('rhub'); install.packages('readr'); install.packages('rprojroot')"
 
 # Make the man pages
 Rscript -e "chooseCRANmirror(graphics=FALSE, ind=1) ; install.packages('roxygen2') ; roxygen2::roxygenise()"
