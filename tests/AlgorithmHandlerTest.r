@@ -33,7 +33,7 @@ test.runHelloWorld <- function() {
   expected <-
     list(result = "hello james",
          metadata = list(content_type = "text"))
-  con <- "tests/input/hello_world.json"
+  con <- "input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
   }
@@ -49,7 +49,7 @@ test.runHelloWorld <- function() {
    expected <-
      list(result = "hello james",
           metadata = list(content_type = "text"))
-   con = "tests/input/hello_json.json"
+   con = "input/hello_json.json"
    algorithm <- function(input) {
      paste("hello", input$name)
    }
@@ -66,7 +66,7 @@ test.runWithContext <- function() {
   expected <-
     list(result = "hello james here is your file /tmp/example",
          metadata = list(content_type = "text"))
-  con = "tests/input/hello_world.json"
+  con = "input/hello_world.json"
   algorithm <- function(input, context) {
     if (is.null(context)) {
       stop("Context was not defined")
@@ -98,7 +98,7 @@ test.algorithmThrowsException <- function() {
         error_type = "AlgorithmError"
       )
     )
-  con = "tests/input/hello_world.json"
+  con = "input/hello_world.json"
   algorithm <- function(input) {
     stop("a runtime exception was thrown")
   }
@@ -120,7 +120,7 @@ test.arityProblemWithContextThrowsException <- function() {
         error_type = "AlgorithmError"
       )
     )
-  con = "tests/input/hello_world.json"
+  con = "input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
   }
@@ -145,7 +145,7 @@ test.loaderThrowsException <- function() {
       )
     )
   
-  con = "tests/input/hello_world.json"
+  con = "input/hello_world.json"
   algorithm <- function(input) {
     paste("hello", input)
   }
