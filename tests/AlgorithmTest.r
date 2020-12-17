@@ -110,16 +110,12 @@ test.getSCMAuthStatus <- function() {
   checkTrue(!is.null(client$getSCMAuthStatus("internal")$authorization_status),TRUE)
 }
 
-test.revokeSCMAuth <- function(){
-  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
-  # Error 4008 means endpoint was reached but no oauth token was found
-  response <-client$revokeSCMAuth("internal")
-  if(!is.null(response$error)){
-    checkEquals(httr::content(response)$error$code,4008)
-  } else {
-    checkEquals(httr::status_code(revoke),200)
-  }
-}
+# test.revokeSCMAuth <- function(){
+#   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_TAPI_KEY",unset=NA),(Sys.getenv("ALGORITHMIA_TEST_API",unset=NA)))
+#   response <-client$revokeSCMAuth("fa359f8a-5a37-4726-9174-1475b41939ef")
+#   print(response)
+#   checkEquals(httr::status_code(response),204)
+# }
 
 test.listAlgoVersions = function() {
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
