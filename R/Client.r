@@ -124,10 +124,35 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       url = paste0("/v1/algorithms/",algoUrl,"/builds")
       response <- httr::content(getHelper(url),"parsed")
     },
+    getAlgoBuild = function(algoUrl,buildId){
+      url = paste0("/v1/algorithms/",algoUrl,"/builds/",buildId)
+      response <- httr::content(getHelper(url),"parsed")
+    },
     getAlgoBuildLogs = function(algoUrl, buildId){
       url = paste0("/v1/algorithms/",algoUrl,"/builds/",buildId,"/logs")
       response <- httr::content(getHelper(url),"parsed")
     },
+    getAlgoSCMStatus = function(algoUrl){
+      url = paste0("/v1/algorithms/",algoUrl,"/scm/status")
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    ## SCMs
+    listSCMs = function(){
+      response <- httr::content(getHelper("/v1/scms"),"parsed")
+    },
+    getSCM = function(scmId){
+      url = paste0("/v1/scms/",scmId)
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    getSCMAuthStatus = function(scmId){
+      url = paste0("/v1/scms/",scmId,"/oauth/status")
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    revokeSCMAuth = function(scmId){
+      url = paste0("/v1/scms/",scmId,"/oauth/revoke")
+      response <- postJsonHelper(url,{})
+    },
+    ## Helper functions
     getBasicHeaders = function() {
       headers <- c()
 
@@ -152,7 +177,7 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       }
     },
     postHelper = function(algoUrl, input, queryParameters=c()){
-      "Simpler post helper that doesnt change formatting"
+      "post helper that doesnt change formatting"
       headers <- getBasicHeaders()
       headers["Content-Type"] <- 'application/json'
       response <- httr::POST(url=URLencode(paste0(apiAddress, algoUrl)), query={}, config=httr::add_headers(headers), body=input)
