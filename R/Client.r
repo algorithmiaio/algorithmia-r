@@ -136,6 +136,21 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       url = paste0("/v1/algorithms/",algoUrl,"/scm/status")
       response <- httr::content(getHelper(url),"parsed")
     },
+    ## ORG 
+    createOrg = function(inputObject){
+      #takes in json object
+      url = "/v1/organizations"
+      response <- httr::content(postHelper(url,inputObject))
+    },
+    getOrg = function(orgName){
+      url = paste0("/v1/organizations/",orgName)
+      response <- httr::content(getHelper(url),"parsed")
+    },
+    editOrg = function(orgName, inputObject){
+      #takes in json object
+      url = paste0("/v1/organizations/",orgName)
+      response <- httr::content(putHelper(url,inputObject))
+    },
     ## SCMs
     listSCMs = function(){
       response <- httr::content(getHelper("/v1/scms"),"parsed")

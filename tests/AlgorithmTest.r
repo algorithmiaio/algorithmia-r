@@ -90,6 +90,45 @@ test.compileAlgorithm <- function() {
   checkTrue(!is.null(response$id),TRUE)
 }
 
+## ORG
+test.createOrg <- function(){
+  newOrg = paste0("a_myOrg",round(runif(1)*100))
+  payload <- sprintf('{
+    "org_name":"%s",
+    "org_label": "some other label",
+    "org_contact_name": "Some owner",
+    "org_email": "a_myOrg@algo.com"
+  }',newOrg)
+
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_A_KEY",unset=NA),Sys.getenv("ALGORITHMIA_TEST_API",unset=NA))
+  response <- client$createOrg(payload)
+  checkEquals(response$org_name,newOrg)
+}
+
+test.getOrg <- function(){
+  orgName = "a_myOrg84"
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_A_KEY",unset=NA),Sys.getenv("ALGORITHMIA_TEST_API",unset=NA))
+  response <- client$getOrg(orgName)
+  checkEquals(response$org_name,orgName)
+
+}
+
+test.edit_Org <- function(){
+  orgName = "a_myOrg84"
+  payload <- '{
+    "id": "b85d8c4e-7f3c-40b9-9659-6adc2cb0e16f",
+    "org_label": "some other label",
+    "org_contact_name": "Some owner",
+    "org_email": "a_myOrg84@algo.com",
+    "type_id": "3d40e3b0-d82a-11ea-9a3c-0ee5e2d35097",
+    "resource_type": "organization"
+  }'
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_A_KEY",unset=NA),Sys.getenv("ALGORITHMIA_TEST_API",unset=NA))
+  response <- client$editOrg(orgName,payload)
+  checkEquals(httr::status_code(response),204)
+}
+
+## SCM
 test.getSCMStatus <- function(){
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_API_KEY",unset=NA))
   checkTrue(!is.null(client$getAlgoSCMStatus("J_bragg/Echo")$scm_connection_status),TRUE)
