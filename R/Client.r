@@ -137,10 +137,33 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       response <- httr::content(getHelper(url),"parsed")
     },
     ## ORG 
+    getOrgTypes = function(){
+      url = "/v1/organization/types"
+      response <- httr::content(getHelper(url),"parsed")
+    },
     createOrg = function(inputObject){
       #takes in json object
+      data = jsonlite::fromJSON(inputObject)
+      types = httr::content(getHelper("/v1/organization/types"),"parsed")
+      error=""
+      for (type in types){
+        if(type$name == data$type_id){
+          error=""
+          data$type_id = type$id
+          break
+        }else{
+          error="invalid type_id"
+        }
+      }
+      data = jsonlite::toJSON(data, auto_unbox = TRUE)
       url = "/v1/organizations"
-      response <- httr::content(postHelper(url,inputObject))
+      response <- httr::content(postHelper(url,data))
+      if(!is.na(response$error$message) && error!=""){
+        response$error$message <- error
+        return(response)
+      }else{
+        return(response)
+      }
     },
     getOrg = function(orgName){
       url = paste0("/v1/organizations/",orgName)
