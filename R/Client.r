@@ -12,7 +12,7 @@ getAlgorithmiaApiAddress <- function(apiAddress=NA_character_) {
 
 getCert <- function(customCert=NA_character_){
   
-  
+
   certfile <- here::here("R/crt/cacert.pem")
   rcert <- file.info(certfile, extra_cols = FALSE)
   #check to see if root cert has been modified in the last 24 weeks or ~5.5 months 
@@ -144,22 +144,15 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
     createOrg = function(inputObject){
       #takes in json object
       data = jsonlite::fromJSON(inputObject)
-      types = httr::content(getHelper("/v1/organization/types"),"parsed")
-      error=""
-      for (type in types){
-        if(type$name == data$type_id){
-          error=""
-          data$type_id = type$id
-          break
-        }else{
-          error="invalid type_id"
-        }
-      }
+      converted = convertTypeid(data$type_id)
+      data$type_id <- converted$id
+
       data = jsonlite::toJSON(data, auto_unbox = TRUE)
       url = "/v1/organizations"
       response <- httr::content(postHelper(url,data))
-      if(!is.na(response$error$message) && error!=""){
-        response$error$message <- error
+
+      if(!is.na(response$error$message) && converted$error!=""){
+        response$error$message <- converted$error
         return(response)
       }else{
         return(response)
@@ -171,8 +164,20 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
     },
     editOrg = function(orgName, inputObject){
       #takes in json object
+      data = jsonlite::fromJSON(inputObject)
+      converted = convertTypeid(data$type_id)
+      data$type_id <- converted$id
+      
+      data = jsonlite::toJSON(data, auto_unbox = TRUE)
       url = paste0("/v1/organizations/",orgName)
-      response <- httr::content(putHelper(url,inputObject))
+      response <- putHelper(url,data)
+      if(("error" %in% names(httr::content(response))) && (converted$error != "")){
+        r = httr::content(response)
+        r$error$message <- converted$error
+        return(r)
+      }else{
+        return(response)
+      }
     },
     ## SCMs
     listSCMs = function(){
@@ -257,6 +262,24 @@ AlgorithmiaClient <- methods::setRefClass("AlgorithmiaClient",
       headers["Content-Type"] <- 'application/json'
 
       httr::PATCH(url=URLencode(paste0(apiAddress, url)), config=httr::add_headers(headers), body=rjson::toJSON(input))
+    },
+    convertTypeid = function(typeid){
+      types = httr::content(getHelper("/v1/organization/types"),"parsed")
+      error=""
+      id=""
+      for (type in types){
+        if(type$name == typeid){
+          error=""
+          id = type$id
+          break
+        }else{
+          error="invalid type_id"
+        }
+      }
+      rList <- list()
+      rList["error"] <- error
+      rList["id"] <- id
+      return(rList)
     }
   )
 )
