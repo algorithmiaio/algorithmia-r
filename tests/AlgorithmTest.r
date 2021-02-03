@@ -91,13 +91,20 @@ test.compileAlgorithm <- function() {
 }
 
 ## ORG
+test.getOrgTypes <- function(){
+  client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_A_KEY",unset=NA),Sys.getenv("ALGORITHMIA_TEST_API",unset=NA))
+  response <- client$getOrgTypes()
+  checkTrue(length(client$getOrgTypes())>0,TRUE)
+}
+
 test.createOrg <- function(){
   newOrg = paste0("a_myOrg",round(runif(1)*100))
   payload <- sprintf('{
     "org_name":"%s",
     "org_label": "some other label",
     "org_contact_name": "Some owner",
-    "org_email": "a_myOrg@algo.com"
+    "org_email": "a_myOrg@algo.com",
+    "type_id":"basic"
   }',newOrg)
 
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_A_KEY",unset=NA),Sys.getenv("ALGORITHMIA_TEST_API",unset=NA))
@@ -120,7 +127,7 @@ test.edit_Org <- function(){
     "org_label": "some other label",
     "org_contact_name": "Some owner",
     "org_email": "a_myOrg84@algo.com",
-    "type_id": "3d40e3b0-d82a-11ea-9a3c-0ee5e2d35097",
+    "type_id": "basic",
     "resource_type": "organization"
   }'
   client <- getAlgorithmiaClient(Sys.getenv("ALGORITHMIA_A_KEY",unset=NA),Sys.getenv("ALGORITHMIA_TEST_API",unset=NA))
