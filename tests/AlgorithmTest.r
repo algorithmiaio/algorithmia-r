@@ -127,6 +127,7 @@ test.edit_Org <- function(){
     "org_label": "some other label",
     "org_contact_name": "Some owner",
     "org_email": "a_myOrg84@algo.com",
+    "org_url": "https://algorithmia.com",
     "type_id": "basic",
     "resource_type": "organization"
   }'
