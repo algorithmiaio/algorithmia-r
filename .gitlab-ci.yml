@@ -9,7 +9,7 @@ variables:
 
 test:tests:
   stage: test
-  image: alpine
+  image: alpine:3.12
   script:
   - if [ -z "$ALGORITHMIA_API_KEY" ]; then echo "Algorithmia API key not defined"; exit 1; fi
   - apk add R R-dev R-doc bash build-base linux-headers libxml2-dev texinfo texlive texmf-dist-fontsextra
@@ -19,7 +19,7 @@ test:tests:
 
 test:check_as_cran:
   stage: test
-  image: alpine
+  image: alpine:3.12
   script:
   - apk add R R-dev R-doc bash build-base linux-headers libxml2-dev texinfo texlive texmf-dist-fontsextra git
   - sh tools/test-cran-package
