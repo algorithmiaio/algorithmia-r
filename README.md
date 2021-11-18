@@ -38,10 +38,10 @@ result <- response$result
 * Verify that the submission follows [all CRAN policies](https://cran.r-project.org/web/packages/policies.html).
 * Submit the new package https://xmpalantir.wu.ac.at/cransubmit/
   * Name: Robert Fulton
-  * Email: rfulton@algorithmia.com
+  * Email: rfulton@datarobot.com
   * Package: <the `tar.gz` file that was created from the build>
   * Optional comment: <leave blank>
-* Monitor email to rfulton@algorithmia.com for any CRAN emails
+* Monitor email to rfulton@datarobot.com for any CRAN emails
   * At the very least, an email should come through asking to confirm the submission. This must be done before the submission will appear in CRAN.
 * Wait for the version of [the library in CRAN](https://cran.r-project.org/web/packages/algorithmia/index.html) is updated with the changes submitted
 * Create a new Git tag on the commit submitted to CRAN. This should include the major, minor, and patch versions (ex: `0.3.0`).
